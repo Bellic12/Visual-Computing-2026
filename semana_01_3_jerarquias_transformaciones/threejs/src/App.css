@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.scene-shell {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, #2e1c55 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, #0d455e 0%, transparent 35%),
+    linear-gradient(180deg, #04030e 0%, #080616 100%);
+}
+
+.scene-shell canvas {
+  display: block;
+}
+
+.hud-panel {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  max-width: 420px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(180, 198, 255, 0.35);
+  background: rgba(8, 10, 28, 0.65);
+  backdrop-filter: blur(8px);
+  color: #eff3ff;
+  pointer-events: none;
+}
+
+.hud-panel h1 {
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.hud-panel p {
+  font-size: 0.88rem;
+  color: #c7d3ff;
+  margin-bottom: 6px;
+}
+
+.hud-panel span {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #9fb2ff;
+}
