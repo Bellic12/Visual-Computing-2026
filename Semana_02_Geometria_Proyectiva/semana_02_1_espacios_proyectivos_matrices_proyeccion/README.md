@@ -107,6 +107,46 @@ donde f = 1/tan(FOV/2)
 
 En este entorno se desarrolló una escena sencilla con 3 objetos sobre el eje Z, donde se implementaron controles de traslación (flechas del teclado), y de rotación de la cámara (wasd), con el objetivo de simular la visión de una cámara, además de ello se hizo uso de perspective() y ortho() con el fin de ser más fiel a la proyección y vista que tiene una camara en un entorno 3D
 
+### 3. Unity
+
+**Mención:** Implementación de Unity desarrollada por Juan David Buitrago Salazar.  
+**Plataforma:** Unity 3D (Core)  
+**Tecnologías:** Unity Camera, proyección perspectiva y ortográfica, configuración de Field of View y Clipping Planes
+
+#### Objetivo de la implementación:
+
+Construir una escena de referencia en el eje de profundidad para evidenciar, de manera práctica, el comportamiento de las proyecciones perspectiva y ortográfica, así como el efecto de los parámetros intrínsecos de cámara (FOV, plano cercano y plano lejano).
+
+#### Desarrollo realizado:
+
+1. **Creación de la escena base**:
+  - Se creó un proyecto 3D llamado **CamarasDemo**.
+  - Se construyó una escena con cubos duplicados y alineados sobre el eje Z (profundidad), en posiciones progresivas (z = 0, 2, 4, 6, 8), para facilitar la comparación visual.
+
+2. **Configuración de cámara en perspectiva**:
+  - Se trabajó con la **Main Camera** en modo **Perspective**.
+  - Se estableció una vista inicial con posición aproximada $(x=0, y=2, z=-10)$ y una leve inclinación en X para observar todos los objetos.
+  - Se verificó el efecto característico: los objetos lejanos se perciben más pequeños, con clara sensación de profundidad y convergencia visual.
+
+3. **Cambio a cámara ortográfica**:
+  - Se cambió la misma cámara al modo **Orthographic**.
+  - Se observó que los objetos conservan su tamaño aparente independientemente de la distancia.
+  - Se confirmó la pérdida de convergencia y de sensación de profundidad propia de esta proyección.
+
+4. **Exploración del Field of View (FOV)**:
+  - En modo perspectiva se evaluaron diferentes valores de FOV:
+    - **FOV = 20**: efecto de zoom y menor distorsión angular.
+    - **FOV = 60**: comportamiento estándar.
+    - **FOV = 100**: gran angular con mayor deformación en objetos cercanos.
+  - Esta variación permitió analizar el compromiso entre amplitud de escena y distorsión geométrica.
+
+5. **Análisis de Clipping Planes (Near/Far)**:
+  - Se probaron configuraciones como:
+    - **Near = 0.1, Far = 100**: escena completa visible.
+    - **Near = 5**: recorte de objetos cercanos.
+    - **Far = 5**: recorte de objetos lejanos.
+  - Se comprobó experimentalmente que solo se renderizan objetos dentro del rango $[near, far]$.
+
 ## Resultados visuales:
 
 ### Python
@@ -140,6 +180,26 @@ En esta imagen se presenta la proyección desde una vista lateral  de los tres o
 También se puede tener una vista superior del objeto
 
 ![top view](media/top_view_processing.png)
+
+### Unity
+
+![Entorno base Unity](media/unity_entorno.gif)
+*Fig 9: Construcción de la escena base con múltiples cubos alineados en profundidad (eje Z), usada como referencia para evaluar las proyecciones.*
+
+![Proyección en perspectiva - Unity](media/unity_proyeccion_perspectiva.png)
+*Fig 10: Resultado con cámara en modo perspectiva: los objetos más lejanos se observan más pequeños y se evidencia la percepción de profundidad.*
+
+![Proyección ortográfica - Unity](media/unity_proyeccion_ortogonal.png)
+*Fig 11: Resultado con cámara ortográfica: se preserva el tamaño aparente de los objetos y desaparece la convergencia visual.*
+
+![Comparación de proyecciones en Unity](media/unity_proyecciones.gif)
+*Fig 12: Comparación dinámica entre proyección perspectiva y ortográfica en la misma escena.*
+
+![Variación del FOV en Unity](media/unity_fov_variable.gif)
+*Fig 13: Efecto del cambio del Field of View: FOV bajo comprime la escena, FOV alto incrementa la distorsión angular.*
+
+![Clipping planes en Unity](media/unity_clipping_plane.gif)
+*Fig 14: Demostración del recorte por planos Near/Far y su impacto directo en los objetos visibles de la escena.*
 
 ## Código relevante: 
 
@@ -318,10 +378,18 @@ Durante el desarrollo de este taller se utilizaron prompts de IA generativa para
    - "Cómo usar OrbitControls con PerspectiveCamera y OrthographicCamera de @react-three/drei"
    - "Crear líneas de referencia en Three.js para mostrar profundidad entre objetos"
 
+3. **Implementación y validación en Unity**
+  - "Cómo comparar proyección perspectiva y ortográfica en Unity usando una misma escena"
+  - "Qué valores de Field of View permiten observar diferencias claras de distorsión"
+  - "Cómo demostrar visualmente el efecto de los planos Near y Far en una cámara de Unity"
+  - "Configuración base de cámara para escena de prueba con objetos alineados en el eje Z"
+
 
 ## Aprendizajes y dificultades: 
 
 La principal dificultad del taller fue configurar los parámetros de perspectiva de la cámara, puesto que en algunos casos los planos quedaban mal y por ende los elementos nos se van a observar en la vista de cámara
+
+En el componente de Unity, una dificultad adicional fue ajustar de forma consistente los parámetros de cámara para que las comparaciones entre perspectiva, ortográfica, FOV y clipping planes fueran reproducibles en la misma escena. Como aprendizaje principal, se consolidó la relación entre formulación matemática de la proyección y su efecto visual directo en un motor 3D en tiempo real.
 
 
   
