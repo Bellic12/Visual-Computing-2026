@@ -1,7 +1,14 @@
 ﻿# Taller — Cámara Pinhole y Calibración
 
 **Nombre de los estudiante:** 
-**Fecha de entrega:** 27 de febrero de 2026
+- Jeronimo Bermudez Hernandez
+- Juan Felipe Fajardo Garzón
+- Juan David Buitrago Salazar
+- Juan David Cardenas Galvis
+- Nelson Ivan Castellanos Betancourt
+- Juan Pablo Correa Sierra
+
+**Fecha de entrega:**  27/02/2026
 
 ---
 
@@ -111,6 +118,40 @@ $$Z = \frac{f_x \cdot B}{d}$$
 ![Mapa de profundidad](media/12_depth_map.png)
 
 ---
+### Three.js (Bonus)
+
+Se desarrollo una aplicacion con:
+
+1. **PerspectiveCamera configurable** (`fov`, `aspect`, `near`, `far`).
+2. **Parametros extrinsecos configurables** (`x`, `y`, `z`, `yaw`, `pitch`).
+3. **Visualizacion de frustum** en modo observador usando `cameraHelper`.
+4. **Rayo de proyeccion** desde la camara hacia puntos de referencia 3D.
+5. **Funcion de conversion 3D -> 2D** en espacio de imagen virtual.
+6. **Matriz intrinseca K estimada en tiempo real**:
+   - `fx = fy = (h/2) / tan(fov/2)`
+   - `cx = w/2`, `cy = h/2`
+7. **Simulacion de distorsion radial**:
+   - `x_d = x * (1 + k1*r^2 + k2*r^4)`
+   - `y_d = y * (1 + k1*r^2 + k2*r^4)`
+8. **Overlay de comparacion** entre proyeccion ideal y proyeccion distorsionada.
+---
+
+## Resultados visuales Three.js
+
+**Vista de escena observador**
+![MVista de escena observador](media/threejs_observer.png)
+
+**Vista de cámara**
+![Vista de cámara](media/threejs_camera.png)
+
+**GIFs**: uso de los controles para mostrar la interacción en tiempo real del flustrum y la proyección.
+
+Parte 1:
+![GIFs: uso de los controles 1](media/threejs-1.gif)
+Parte 2:
+![GIFs: uso de los controles 2](media/threejs-2.gif)
+
+---
 
 ## Prompts utilizados
 
@@ -121,6 +162,10 @@ Se usó IA generativa como soporte para estructurar los scripts y resolver detal
 - *"Implementa el pipeline completo de calibración estéreo con cv2.stereoCalibrate y cv2.stereoRectify"*
 
 Todo el código fue revisado, ajustado y comentado manualmente.
+
+En Three.js, se usaron prompts como:
+1. "Agrega visualizacion de frustum, rayos de proyeccion y overlay de puntos 3D proyectados a 2D".
+2. "Simula distorsion radial ajustable con k1 y k2 y muestra comparacion visual contra proyeccion ideal en la escena 3d".
 
 ---
 
