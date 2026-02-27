@@ -1,21 +1,16 @@
 # Taller - Proyecciones 3D: Cómo ve una Cámara Virtual
-## Nombres: 
-Jeronimo Bermudez Hernandez
+**Nombre de los estudiante:** 
+- Jeronimo Bermudez Hernandez
+- Juan Felipe Fajardo Garzón
+- Juan David Buitrago Salazar
+- Juan David Cardenas Galvis
+- Nelson Ivan Castellanos Betancourt
+- Juan Pablo Correa Sierra
 
-Juan Felipe Fajardo Garzón
-
-Juan David Buitrago Salazar
-
-Juan David Cardenas Galvis
-
-Nelson Ivan Castellanos Betancourt
-
-Juan Pablo Correa Sierra
-
-## Fecha de entrega: 27/02/2026
+**Fecha de entrega:**  27/02/2026
 
 ## Descripción breve: 
-
+Este taller explora como una camara virtual transforma una escena 3D en una imagen 2D.
 
 ## Implementaciones: 
 
@@ -24,6 +19,13 @@ Juan Pablo Correa Sierra
 Se desarrolló una escena simple con 2 cubos, una esfera y un plano inclinado, a esta se le añadió un script con el que se puede cambiar el modo de proyección para pasar de un modo de perspectiva a una proyección ortogonal, además, se implementó un slider con el fin de poder cambiar el tamaño del plano de proyección
 
 ### Three.js
+
+- Escena con objetos distribuidos en distintas profundidades sobre el eje Z.
+- Alternancia entre `PerspectiveCamera` y `OrthographicCamera`.
+- Controles de orbita (`OrbitControls`) para inspeccion en tiempo real.
+- Panel informativo con parametros de camara:
+  - Perspectiva: `fov`, `aspect`, `near`, `far`
+  - Ortografica: `left`, `right`, `top`, `bottom`, `near`, `far`
 
 ## Resultados visuales:
 
@@ -40,11 +42,13 @@ Sin embargo, al cambiar a proyección ortogonal la escena cambia totalmente
 Debido a que el cubo más lejano es el de mayor tamaño, se ve como es el más grande en la proyección ortogonal; por otro lado, el cambio más visible es la vista del plano y el cubo de la derecha, estos al estar justo frente a la cámara su forma cambia a la de 2 cuadros 2D, y se ve como el cubo que antes no parecía al frente del plano ahora si lo está, evidenciando como la cámara vería los objetos desde el punto exacto donde está
 
 ### Three.js
+| Perspectiva | Ortográfica |
+|-------------|-------------|
+| ![perspective view](media/perspective_view_threejs.png) | ![ortho view](media/ortho_view_threejs.png) |
+| ![perspective view](media/perspective_view_threejs-2.png) | ![ortho view](media/ortho_view_threejs-2.png) |
 
+![ortho view](media/threejs.gif)
 ## Código relevante: 
-
-
-
 
 ### Unity
 La siguiente función se encarga de cambiar el modo de vista, evalua si se encuentra en perpectiva o proyección ortogonal y cambia el valor de la cámara por el otro; esta función se encuentra asociada al botón de la UI
@@ -72,10 +76,13 @@ void CambiarTamano(float value)
 ```
 
 ### Three.js
-
+- `threejs/src/components/CameraSystem.jsx`: logica de camaras, sincronizacion y telemetria.
+- `threejs/src/components/OverlayPanel.jsx`: UI para control e inspeccion de parametros.
+- `threejs/src/components/SceneObjects.jsx`: escena y objetos a diferentes profundidades.
 
 ## Prompts utilizados: 
-
+1. "Pon rectangulos transparentes entre los objetos para poder visualizar mejor la diferencia entre camara en perspectiva y ortografica."
+2. "Separar el proyecto por componentes con buenas practicas y sin depender de codigo previo."
 
 
 ## Aprendizajes y dificultades: 
