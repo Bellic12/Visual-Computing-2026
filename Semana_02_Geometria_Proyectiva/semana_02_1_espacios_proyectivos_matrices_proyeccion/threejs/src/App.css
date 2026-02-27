@@ -1,0 +1,111 @@
+.app-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.info-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.info-panel h1 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #61dafb;
+}
+
+.info-panel p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.info-panel p:last-child {
+  margin-bottom: 0;
+}
+
+.camera-controls {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  z-index: 100;
+}
+
+.camera-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: rgba(97, 218, 251, 0.9);
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.camera-button:hover {
+  background: rgba(97, 218, 251, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+.camera-button.active {
+  background: rgba(157, 75, 75, 0.9);
+  color: white;
+}
+
+.camera-button.active:hover {
+  background: rgba(157, 75, 75, 1);
+}
+
+.depth-info {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 300px;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.depth-info h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #61dafb;
+}
+
+.depth-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.depth-info li {
+  font-size: 0.85rem;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.depth-info li:last-child {
+  border-bottom: none;
+}
+
+.depth-info .object-label {
+  font-weight: 600;
+  color: #61dafb;
+}
