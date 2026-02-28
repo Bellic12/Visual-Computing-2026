@@ -2,6 +2,14 @@
 
 Este proyecto demuestra la diferencia entre cámaras perspectivas y ortográficas en Three.js usando React Three Fiber, mostrando cómo cambia la percepción de profundidad con cada tipo de proyección.
 
+## Integrantes
+- Juan David Buitrago Salazar
+- Juan David Cardenas Galvis
+- Jeronimo Bermudez Hernandez
+- Nelson Ivan Castellanos Betancourt
+- Juan Pablo Correa Sierra
+- Juan Felipe Fajardo Garzón
+
 ## Características
 
 - Escena con 3 objetos posicionados a diferentes profundidades
@@ -82,3 +90,12 @@ src/
   └── components/
       └── DepthScene.jsx   # Escena 3D con objetos y cámaras
 ```
+
+## Contribuciones del grupo
+
+- **Juan David Buitrago Salazar:** Coordinación técnica del entregable, integración final y soporte en implementación.
+- **Juan David Cardenas Galvis:** Desarrollo de componentes matemáticos y validación de resultados.
+- **Jeronimo Bermudez Hernandez:** Implementación de funcionalidades y apoyo en integración.
+- **Nelson Ivan Castellanos Betancourt:** Desarrollo de visualización y pruebas de comportamiento.
+- **Juan Pablo Correa Sierra:** Implementación de componentes pendientes y soporte de integración.
+- **Juan Felipe Fajardo Garzón:** Documentación de resultados y elaboración de evidencias.

@@ -1,12 +1,12 @@
 ﻿# Taller — Cámara Pinhole y Calibración
 
-**Nombre de los estudiante:** 
-- Jeronimo Bermudez Hernandez
-- Juan Felipe Fajardo Garzón
+## Integrantes
 - Juan David Buitrago Salazar
 - Juan David Cardenas Galvis
+- Jeronimo Bermudez Hernandez
 - Nelson Ivan Castellanos Betancourt
 - Juan Pablo Correa Sierra
+- Juan Felipe Fajardo Garzón
 
 **Fecha de entrega:**  27/02/2026
 
@@ -197,3 +197,14 @@ pip install opencv-python numpy matplotlib
 ```
 
 Todos los resultados se guardan automáticamente en `media/`.
+
+---
+
+## Contribuciones del grupo
+
+- **Juan David Buitrago Salazar:** Coordinación técnica del entregable, integración final y soporte en implementación.
+- **Juan David Cardenas Galvis:** Desarrollo de componentes matemáticos y validación de resultados.
+- **Jeronimo Bermudez Hernandez:** Implementación de funcionalidades y apoyo en integración.
+- **Nelson Ivan Castellanos Betancourt:** Desarrollo de visualización y pruebas de comportamiento.
+- **Juan Pablo Correa Sierra:** Implementación de componentes pendientes y soporte de integración.
+- **Juan Felipe Fajardo Garzón:** Documentación de resultados y elaboración de evidencias.

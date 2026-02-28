@@ -1,16 +1,11 @@
 # Taller - Espacios Proyectivos y Matrices de Proyección
-## Nombres: 
-Jeronimo Bermudez Hernandez
-
-Juan Felipe Fajardo Garzón
-
-Juan David Buitrago Salazar
-
-Juan David Cardenas Galvis
-
-Nelson Ivan Castellanos Betancourt
-
-Juan Pablo Correa Sierra
+## Integrantes
+- Juan David Buitrago Salazar
+- Juan David Cardenas Galvis
+- Jeronimo Bermudez Hernandez
+- Nelson Ivan Castellanos Betancourt
+- Juan Pablo Correa Sierra
+- Juan Felipe Fajardo Garzón
 
 
 ## Fecha de entrega: 27/02/2026
@@ -390,6 +385,15 @@ Durante el desarrollo de este taller se utilizaron prompts de IA generativa para
 La principal dificultad del taller fue configurar los parámetros de perspectiva de la cámara, puesto que en algunos casos los planos quedaban mal y por ende los elementos nos se van a observar en la vista de cámara
 
 En el componente de Unity, una dificultad adicional fue ajustar de forma consistente los parámetros de cámara para que las comparaciones entre perspectiva, ortográfica, FOV y clipping planes fueran reproducibles en la misma escena. Como aprendizaje principal, se consolidó la relación entre formulación matemática de la proyección y su efecto visual directo en un motor 3D en tiempo real.
+
+## Contribuciones del grupo
+
+- **Juan David Buitrago Salazar:** Coordinación técnica del entregable, integración final y soporte en implementación.
+- **Juan David Cardenas Galvis:** Desarrollo de componentes matemáticos y validación de resultados.
+- **Jeronimo Bermudez Hernandez:** Implementación de funcionalidades y apoyo en integración.
+- **Nelson Ivan Castellanos Betancourt:** Desarrollo de visualización y pruebas de comportamiento.
+- **Juan Pablo Correa Sierra:** Implementación de componentes pendientes y soporte de integración.
+- **Juan Felipe Fajardo Garzón:** Documentación de resultados y elaboración de evidencias.
 
 
   

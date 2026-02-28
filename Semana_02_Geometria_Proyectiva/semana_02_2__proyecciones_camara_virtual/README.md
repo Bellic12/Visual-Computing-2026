@@ -1,11 +1,11 @@
 # Taller - Proyecciones 3D: Cómo ve una Cámara Virtual
-**Nombre de los estudiante:** 
-- Jeronimo Bermudez Hernandez
-- Juan Felipe Fajardo Garzón
+## Integrantes
 - Juan David Buitrago Salazar
 - Juan David Cardenas Galvis
+- Jeronimo Bermudez Hernandez
 - Nelson Ivan Castellanos Betancourt
 - Juan Pablo Correa Sierra
+- Juan Felipe Fajardo Garzón
 
 **Fecha de entrega:**  27/02/2026
 
@@ -87,3 +87,12 @@ void CambiarTamano(float value)
 
 ## Aprendizajes y dificultades: 
 La principal dificultad en Unity fue configurar el cambio de perspectivas correctamente, puesto que en algunos casos lanzaba un error relacionado con que el puntero se encontraba fuera del frustrum, lo cual se debía a problemas al inicializar la perspectiva ortogonal
+
+## Contribuciones del grupo
+
+- **Juan David Buitrago Salazar:** Coordinación técnica del entregable, integración final y soporte en implementación.
+- **Juan David Cardenas Galvis:** Desarrollo de componentes matemáticos y validación de resultados.
+- **Jeronimo Bermudez Hernandez:** Implementación de funcionalidades y apoyo en integración.
+- **Nelson Ivan Castellanos Betancourt:** Desarrollo de visualización y pruebas de comportamiento.
+- **Juan Pablo Correa Sierra:** Implementación de componentes pendientes y soporte de integración.
+- **Juan Felipe Fajardo Garzón:** Documentación de resultados y elaboración de evidencias.

@@ -1,8 +1,6 @@
 # Taller 2.4 - Transformaciones Homogéneas y Cambios de Base
 
-## Nombre del estudiante
-
-**Equipo de trabajo:**
+## Integrantes
 
 - Juan David Buitrago Salazar
 - Juan David Cardenas Galvis
@@ -217,7 +215,7 @@ Otro punto exigente fue coordinar en una misma práctica temas de geometría pro
 
 ---
 
-## Contribuciones grupales
+## Contribuciones del grupo
 
 - **Juan David Buitrago Salazar:** asumió el punto 2.4 en Python y el punto 2.1 en Unity. En esta entrega, desarrolló integralmente la implementación de Python para transformaciones homogéneas y cambios de base, incluyendo funciones matriciales, verificaciones de consistencia, generación de gráficas y animación de cinemática directa.
 
