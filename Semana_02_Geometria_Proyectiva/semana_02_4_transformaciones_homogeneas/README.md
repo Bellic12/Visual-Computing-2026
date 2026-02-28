@@ -58,7 +58,7 @@ Se implementó una escena 3D en React Three Fiber para aplicar transformaciones 
 
 Además, se desarrolló una demostración explícita de composición de transformaciones usando matrices 4x4 manuales con `THREE.Matrix4`. Se comparó el resultado de transformar un punto homogéneo `p=(1,0,0,1)` con los órdenes `(T·R)` y `(R·T)`, evidenciando la no conmutatividad. Los resultados se visualizaron con dos marcadores y se mostraron numéricamente mediante un overlay en pantalla.
 
-Para este caso las traslaciones y rotaciones aplicadas son las mismas a las realizadas en la implementación de Unity.x|
+Para este caso las traslaciones y rotaciones aplicadas son las mismas a las realizadas en la implementación de Unity, se crearon 2 archivos (App.css) y (App - copia.css) para cada uno de los scripts
 
 ---
 
@@ -420,6 +420,14 @@ semana_02_4_transformaciones_homogeneas/
 │   ├── python_3d_cubo_transformado.png
 │   ├── python_robotica_cinematica_directa.png
 │   └── python_robotica_cinematica_directa.gif
+│   └── Transfo_1_JS.gif
+│   └── Transfo_1_u.gif
+│   └── Transfo_2_JS.gif
+│   └── Transfo_2_u.gif
+│   └── Transfo_3_u.png
+├── Unity/
+│   ├── My project
+├── threejs/
 ├── 04_plantilla_readme_entregas_talleres.md
 └── README.md
 ```
