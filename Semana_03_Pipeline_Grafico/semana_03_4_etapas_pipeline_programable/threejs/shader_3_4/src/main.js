@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 
-        // --- 1. ESCENA BÁSICA ---
+        //Creación de la escena
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // --- 2. EL SHADER (Código que te pasaron) ---
+        //Código proporcionado para los shaders
         const vertexShader = `
             uniform float time;
             varying vec2 vUv;
@@ -30,7 +30,7 @@ import * as THREE from 'three';
             }
         `;
 
-        // --- 3. CREAR EL OBJETO ---
+        //Creación del objeto con el shader
         const geometry = new THREE.PlaneGeometry(5, 5, 32, 32); // Plano con muchos segmentos para que se doble
         const material = new THREE.ShaderMaterial({
             uniforms: {
@@ -46,11 +46,9 @@ import * as THREE from 'three';
 
         camera.position.z = 5;
 
-        // --- 4. BUCLE DE ANIMACIÓN ---
+        //Animación principal
         function animate(now) {
             requestAnimationFrame(animate);
-            
-            // Actualizamos el uniform 'time' (convertido a segundos)
             material.uniforms.time.value = now * 0.001;
             
             renderer.render(scene, camera);
