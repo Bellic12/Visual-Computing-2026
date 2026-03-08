@@ -49,6 +49,7 @@ Como solución a este problema se puede generar una ligera diferencia entre las 
 ![z_fighting_unity](media/z_fighting_unity.gif)
 
 Finalmente, le agregamos el nuevo material al otro cubo solapado, en la siguiente animación se ve claramente la diferencia entre materiales, el material "lineal" posee ese brillo blanco, mientras que el material "no lineal" representa la profundidad con una escala de grises; ambos materiales son sensibles a los cambios en los planos de la cámara
+
 ![buffer_comparation](media/buffer_comparation.gif)
 
 ### Three.js
@@ -70,7 +71,22 @@ el código, dibujando elementos que no se deberían ver al estar detras de otros
 
 ### Unity:
 
+El siguiente fragmento de código de encarga de intercambiar entre el modo "lineal" y el "no lineal" de los materiales, de esta forma para uno se aplica el shader dado (el que contiene brillo) o el de escala de grises
 
+```cs
+half4 frag(Varyings IN) : SV_Target {
+    float depth;
+
+    if (_UseLinear > 0.5) {
+        depth = IN.positionCS.w / _ProjectionParams.z;
+    }
+    else {
+        depth = UNITY_Z_0_FAR_FROM_CLIPSPACE(IN.positionCS.z);
+    }
+
+    return float4(depth, depth, depth, 1.0);
+}
+```
 
 ### Three.js
 
@@ -99,6 +115,12 @@ const depthMaterial = new THREE.ShaderMaterial({
 Este fragmento de código es el que se encarga de crear el depth material para aplicarlo
 a los objetos de la escena.
 
+## Prompts utilizados
+
+Genera un Script en C# que permita comparar entre el buffer lineal y el no lineal aplicando un shader a un material
+
 ## Aprendizajes y dificultades
+
+La principal dificultad fue la implementación y el uso de las variables en la creación del shader, puesto que algunas veces existían errores en la compilación debido al incoherencias dentro de estas variables
 
 ## Contribuciones del grupo

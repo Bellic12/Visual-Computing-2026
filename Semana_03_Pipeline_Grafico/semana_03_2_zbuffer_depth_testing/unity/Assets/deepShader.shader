@@ -43,13 +43,6 @@ Shader "Custom/DeepShader_Comparison"
                     depth = IN.positionCS.w / _ProjectionParams.z;
                 }
                 else {
-                    // MODO NO LINEAL: El valor "crudo" del Z-Buffer
-                    // Usamos la macro de URP para normalizar el valor nativo
-                    /*#if UNITY_REVERSED_Z
-                        depth = 1.0 - (IN.positionCS.z / IN.positionCS.w);
-                    #else
-                        depth = IN.positionCS.z / IN.positionCS.w;
-                    #endif*/
                     depth = UNITY_Z_0_FAR_FROM_CLIPSPACE(IN.positionCS.z);
                 }
 
