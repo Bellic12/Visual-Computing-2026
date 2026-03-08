@@ -1,4 +1,4 @@
-# Taller - Proyecciones 3D: Cómo ve una Cámara Virtual
+# Taller - Implementación de Z-Buffer y Depth Testing
 
 ## Integrantes
 
