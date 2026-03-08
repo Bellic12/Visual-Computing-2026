@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Z-Buffer Visualization Threejs</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <div id="ui">
+      <button id="toggleDepth">Toggle Depth Test</button>
+      <button id="toggleMaterial">Toggle Depth View</button>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+
+    <style>
+      #ui {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+      }
+      button {
+        display: block;
+        margin-bottom: 8px;
+        padding: 8px;
+      }
+    </style>
+  </body>
+</html>
