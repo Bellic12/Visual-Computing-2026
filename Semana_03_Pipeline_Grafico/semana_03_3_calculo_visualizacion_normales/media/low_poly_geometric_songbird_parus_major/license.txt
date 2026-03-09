@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low Poly Geometric Songbird Parus major
+* source:	https://sketchfab.com/3d-models/low-poly-geometric-songbird-parus-major-89e178f081f448f6bf125ee565b09671
+* author:	algorin94 (https://sketchfab.com/algorin94)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low Poly Geometric Songbird Parus major" (https://sketchfab.com/3d-models/low-poly-geometric-songbird-parus-major-89e178f081f448f6bf125ee565b09671) by algorin94 (https://sketchfab.com/algorin94) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
