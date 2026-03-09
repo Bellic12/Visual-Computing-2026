@@ -73,7 +73,7 @@ Una vez hecha la "base" se procedió a modificar el código del shader con el fi
 ![Vertex shader transformation](./media/unity/shadow_creation.png)
 
 *Aplicación de un material que tenga asociado un shadow personalizado*
-![Vertex shader transformation](./media/unity/material_1.mp4)
+![Vertex shader transformation](./media/unity/material_1.gif)
 
 <a id="fragment_shader"></a>
 
@@ -83,7 +83,7 @@ Una vez hecha la "base" se procedió a modificar el código del shader con el fi
 <a id="geometry_shader"></a>
 
 *Aplicación de un geometry shader*
-![Fragment shader](./media/unity/Sombras_cambio_camara.gif)
+![Fragment shader](./media/unity/geom_shader_final.gif)
 
 <a id="frame_debug"></a>
 
