@@ -48,6 +48,9 @@ Ahora bien, al aplicar el Fragment Shader, los objetos de la escena presentan lo
 Los siguiente numerales, se pueden ver en la siguiente [animación.](#fragment_shader)
 
 
+Por otro lado, el Geometry Shader introduce una etapa adicional en el pipeline gráfico entre el Vertex Shader y el Fragment Shader. En esta etapa, el shader recibe los triángulos generados por el Vertex Shader y permite modificar sus vértices antes de que se realice el proceso de rasterización. En la implementación realizada, se agregó la directiva `#pragma geometry` y una función `geom()` que procesa cada triángulo y desplaza ligeramente la posición de sus vértices en el eje Y. Como resultado, la geometría del objeto se modifica dinámicamente antes de su renderizado final, demostrando cómo el Geometry Shader puede manipular primitivas completas dentro del pipeline programable. La animación en formato gif que muestra los resultados se encuentra [acá.](#geometry_shader)
+
+
 ### Three.js:
 
 Inicialmente se creó y configuró la escena dentro de Three.Js, inicializando también la cámara y el renderizador; posteriormete se creó una geometría de esfera y un shader personalizado haciendo uso de los fragmentos de código proporcionados en el taller (vertex shader para geometría y fragment shader para apariencia), para luego aplicarlos a una malla y añadir el objeto a nuestra escena, iniciando de esta forma la animación.
@@ -71,6 +74,11 @@ Una vez hecha la "base" se procedió a modificar el código del shader con el fi
 <a id="fragment_shader"></a>
 
 *Aplicación de un fragment shader*
+![Fragment shader](./media/unity/Sombras_cambio_camara.gif)
+
+<a id="geometry_shader"></a>
+
+*Aplicación de un geometry shader*
 ![Fragment shader](./media/unity/Sombras_cambio_camara.gif)
 
 
