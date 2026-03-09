@@ -16,6 +16,8 @@ En este taller se buscaba comprender el funcionamiento de las diferentes etapas 
 
 ### Unity:
 
+En primera instancia se solicita un vertex shader que aplique transformaciones personalizadas a un objeto 3d.
+Para esto se debe crear un shadow y asignarlo a un material, a continuación [se referencian la creación de estos objetos y el resultado final de la aplicación sobre un objeto 3d](#vertex_shader). Además, se ve el código del [shader.](#vertex_shader_code)
 
 
 ### Three.js:
@@ -28,7 +30,15 @@ Una vez hecha la "base" se procedió a modificar el código del shader con el fi
 ## Resultados visuales:
 
 
+
 ### Unity:
+<a id="vertex_shader"></a>
+*Creación de una sombra para aplicar las transformaciones definidas sobre el objeto 3d a crear*
+
+![Vertex shader transformation](./media/unity/shadow_creation.png)
+
+*Aplicación de un material que tenga asociado un shadow personalizado*
+![Vertex shader transformation](./media/unity/material_1.mp4)
 
 
 ### Three.js
@@ -60,6 +70,93 @@ Se evidencia una ondulación que combina aleatoriedad con un patrón definido, y
 
 
 ### Unity:
+<a id="vertex_shader_code"></a>
+
+```json
+// Shader "Custom/vertexFragmentExample"
+{
+    Properties
+    {
+        [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
+        [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
+    }
+
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+
+        Pass
+        {
+            HLSLPROGRAM
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct Varyings
+            {
+                float4 positionHCS : SV_POSITION;
+                float3 normalWS : TEXCOORD1;
+                float2 uv : TEXCOORD0;
+            };
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+                half4 _BaseColor;
+                float4 _BaseMap_ST;
+            CBUFFER_END
+
+            Varyings vert(Attributes IN)
+            {
+                Varyings OUT;
+
+                float3 pos = IN.positionOS.xyz;
+
+                float wave = sin(_Time.y + pos.x * 5.0) * 0.2;
+                pos.y += wave;
+
+                float3 worldPos = TransformObjectToWorld(pos);
+                float3 viewPos = TransformWorldToView(worldPos);
+                float4 clipPos = TransformWorldToHClip(worldPos);
+
+                OUT.positionHCS = clipPos;
+
+                OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
+
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+
+                return OUT;
+            }
+
+            half4 frag(Varyings IN) : SV_Target
+            {
+                float3 normal = normalize(IN.normalWS);
+
+                float3 lightDir = normalize(_MainLightPosition.xyz);
+
+                float NdotL = max(0, dot(normal, lightDir));
+
+                half4 texColor = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
+
+                float3 diffuse = texColor.rgb * NdotL;
+
+                return half4(diffuse, 1);
+            }
+            ENDHLSL
+        }
+    }
+}
+```
 
 
 
