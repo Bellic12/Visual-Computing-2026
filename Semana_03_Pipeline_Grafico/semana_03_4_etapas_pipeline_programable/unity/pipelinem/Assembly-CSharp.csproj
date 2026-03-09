@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\vertexFragmentExample.shader" />
+    <None Include="Assets\FragmentShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

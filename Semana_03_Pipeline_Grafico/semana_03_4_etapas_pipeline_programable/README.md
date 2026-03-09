@@ -19,6 +19,34 @@ En este taller se buscaba comprender el funcionamiento de las diferentes etapas 
 En primera instancia se solicita un vertex shader que aplique transformaciones personalizadas a un objeto 3d.
 Para esto se debe crear un shadow y asignarlo a un material, a continuación [se referencian la creación de estos objetos y el resultado final de la aplicación sobre un objeto 3d](#vertex_shader). Además, se ve el código del [shader.](#vertex_shader_code)
 
+Ahora bien, al aplicar el Fragment Shader, los objetos de la escena presentan los siguientes cambios visuales y de comportamiento:
+
+1. El color del objeto se calcula por píxel
+
+    Antes, el objeto simplemente mostraba la textura multiplicada por un color base.
+    Ahora, cada píxel del objeto calcula su color en función de la iluminación de la escena.
+    Esto significa que el objeto ya no tiene un color plano, sino que su apariencia depende de la orientación de la superficie respecto a la luz.
+
+2. El objeto responde a la iluminación de la escena
+
+    Las superficies que apuntan hacia la luz se ven más iluminadas.
+    Las superficies inclinadas respecto a la luz reciben menos iluminación.
+    Las superficies opuestas a la luz se ven más oscuras.
+    Esto produce un sombreado que da mayor percepción de volumen al objeto.
+
+3. La textura ahora se combina con la iluminación
+
+    La textura del objeto sigue siendo visible, pero ahora su color se modula según la intensidad de la luz.
+    Esto genera que: La textura se vea más brillante en las zonas iluminadas.
+    La textura se vea más oscura en las zonas en sombra.
+
+4. El objeto cambia de apariencia si se mueve la luz
+
+    Si se cambia la posición o dirección de la luz en la escena, el sombreado del objeto cambia dinámicamente.
+    Esto demuestra que el color final se calcula en tiempo real usando la dirección de la luz y la normal de la superficie.
+
+Los siguiente numerales, se pueden ver en la siguiente [animación.](#fragment_shader)
+
 
 ### Three.js:
 
@@ -39,6 +67,11 @@ Una vez hecha la "base" se procedió a modificar el código del shader con el fi
 
 *Aplicación de un material que tenga asociado un shadow personalizado*
 ![Vertex shader transformation](./media/unity/material_1.mp4)
+
+<a id="fragment_shader"></a>
+
+*Aplicación de un fragment shader*
+![Fragment shader](./media/unity/Sombras_cambio_camara.gif)
 
 
 ### Three.js
@@ -72,8 +105,7 @@ Se evidencia una ondulación que combina aleatoriedad con un patrón definido, y
 ### Unity:
 <a id="vertex_shader_code"></a>
 
-```json
-// Shader "Custom/vertexFragmentExample"
+```
 {
     Properties
     {
@@ -158,6 +190,89 @@ Se evidencia una ondulación que combina aleatoriedad con un patrón definido, y
 }
 ```
 
+<a id="fragment_shader_code"></a>
+
+```
+Shader "Custom/FragmentShader"
+{
+    Properties
+    {
+        [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
+        [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
+    }
+
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+
+        Pass
+        {
+            HLSLPROGRAM
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct Varyings
+            {
+                float4 positionHCS : SV_POSITION;
+                float3 normalWS : TEXCOORD1;
+                float2 uv : TEXCOORD0;
+            };
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+                half4 _BaseColor;
+                float4 _BaseMap_ST;
+            CBUFFER_END
+
+            Varyings vert(Attributes IN)
+            {
+                Varyings OUT;
+
+                float3 worldPos = TransformObjectToWorld(IN.positionOS.xyz);
+                float3 viewPos = TransformWorldToView(worldPos);
+                float4 clipPos = TransformWorldToHClip(worldPos);
+
+                OUT.positionHCS = clipPos;
+
+                OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
+
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+
+                return OUT;
+            }
+
+            half4 frag(Varyings IN) : SV_Target
+            {
+                float3 normal = normalize(IN.normalWS);
+
+                float3 lightDir = normalize(_MainLightPosition.xyz);
+
+                float NdotL = max(0, dot(normal, lightDir));
+
+                half4 texColor = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
+
+                float3 finalColor = texColor.rgb * NdotL;
+
+                return half4(finalColor, 1);
+            }
+
+            ENDHLSL
+        }
+    }
+}
+```
 
 
 ### Three.js:
