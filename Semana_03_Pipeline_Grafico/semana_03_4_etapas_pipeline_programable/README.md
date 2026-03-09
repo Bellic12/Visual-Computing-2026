@@ -50,6 +50,10 @@ Los siguiente numerales, se pueden ver en la siguiente [animación.](#fragment_s
 
 Por otro lado, el Geometry Shader introduce una etapa adicional en el pipeline gráfico entre el Vertex Shader y el Fragment Shader. En esta etapa, el shader recibe los triángulos generados por el Vertex Shader y permite modificar sus vértices antes de que se realice el proceso de rasterización. En la implementación realizada, se agregó la directiva `#pragma geometry` y una función `geom()` que procesa cada triángulo y desplaza ligeramente la posición de sus vértices en el eje Y. Como resultado, la geometría del objeto se modifica dinámicamente antes de su renderizado final, demostrando cómo el Geometry Shader puede manipular primitivas completas dentro del pipeline programable. La animación en formato gif que muestra los resultados se encuentra [acá.](#geometry_shader)
 
+Los procesos anteriores permiten la creación de shaders que modifican el comportamiento visual de los objetos dentro de una escena. Para analizar y verificar estos cambios es posible utilizar el Frame Debugger de Unity, una herramienta que permite inspeccionar cada paso del proceso de renderizado. Mediante esta herramienta se puede observar información relevante como el mesh del objeto, los shaders aplicados, los materiales y las texturas utilizadas durante el renderizado. Esto facilita la depuración de shaders y la comprensión de cómo se procesan los objetos dentro del pipeline gráfico. Estos detalles pueden observarse en las imágenes mostradas [acá.](#frame_debug)
+
+
+Finalmente, se realizó una comparación entre el uso de un shader estándar de Unity y un shader personalizado. El shader estándar del pipeline de Unity incluye cálculos de iluminación, sombras y otras características visuales que permiten que los objetos reaccionen a la luz de la escena. En contraste, el shader personalizado implementado corresponde a un shader Unlit, el cual no realiza cálculos de iluminación y únicamente muestra el color o la textura definida en el material. Como resultado, el objeto se visualiza con un color uniforme y sin interacción con las luces de la escena. Esta comparación permite evidenciar cómo el pipeline estándar proporciona funcionalidades predefinidas de manera automática, mientras que el pipeline programable ofrece mayor control sobre el comportamiento del shader, aunque requiere implementar manualmente cada efecto deseado. Los resultados se referencian [acá.](#comparacion)
 
 ### Three.js:
 
@@ -80,6 +84,18 @@ Una vez hecha la "base" se procedió a modificar el código del shader con el fi
 
 *Aplicación de un geometry shader*
 ![Fragment shader](./media/unity/Sombras_cambio_camara.gif)
+
+<a id="frame_debug"></a>
+
+*Frame debugger*
+![Debug1](./media/unity/Frame_debug.png)
+![Debug2](./media/unity/frame_debug_2.png)
+
+<a id="comparacion"></a>
+
+*Frame debugger*
+![Debug1](./media/unity/StandardShader.png)
+
 
 
 ### Three.js

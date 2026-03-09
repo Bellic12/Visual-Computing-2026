@@ -54,6 +54,7 @@
     <None Include="Assets\vertexFragmentExample.shader" />
     <None Include="Assets\V2.shader" />
     <None Include="Assets\FragmentShader.shader" />
+    <None Include="Assets\TRADI.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
