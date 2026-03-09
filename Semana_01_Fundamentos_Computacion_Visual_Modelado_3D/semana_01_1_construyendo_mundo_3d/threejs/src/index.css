@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f3f7fb;
+  color: #1f2d3d;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+}
+
+button {
+  cursor: pointer;
+}

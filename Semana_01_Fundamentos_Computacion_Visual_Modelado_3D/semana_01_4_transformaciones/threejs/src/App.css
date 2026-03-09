@@ -1,0 +1,103 @@
+/* ── Layout ──────────────────────────────────────────── */
+#root {
+  width: 100vw;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.viewport-shell {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+}
+
+/* Canvas ocupa todo el contenedor */
+.viewport-shell canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ── HUD overlay ─────────────────────────────────────── */
+.hud-panel {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  z-index: 10;
+  background: rgba(31, 15, 46, 0.76);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 12px;
+  padding: 1rem 1.4rem;
+  color: #ffedd5;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  user-select: none;
+  pointer-events: none;
+  max-width: 260px;
+}
+
+.hud-panel h1 {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.6rem;
+  color: #fbbf24;
+  text-transform: uppercase;
+}
+
+.hud-panel ul {
+  list-style: none;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+}
+
+.hud-panel li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.signal {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.signal-motion { background: #f59e0b; }
+.signal-spin   { background: #fb7185; }
+.signal-pulse  { background: #60a5fa; }
+
+.metrics {
+  margin: 0.65rem 0;
+  border-top: 1px solid rgba(251, 191, 36, 0.3);
+  border-bottom: 1px solid rgba(251, 191, 36, 0.22);
+  padding: 0.55rem 0;
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.76rem;
+}
+
+.metrics-title {
+  margin: 0 0 0.2rem;
+  color: #fde68a;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.metrics p {
+  margin: 0;
+  color: #ffedd5;
+}
+
+.helper {
+  margin: 0.25rem 0 0;
+  font-size: 0.72rem;
+  color: #fdba74;
+}
