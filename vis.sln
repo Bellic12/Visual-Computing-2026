@@ -1,0 +1,132 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semana_02_Geometria_Proyectiva", "Semana_02_Geometria_Proyectiva", "{6B25FF34-1EE2-D0A9-288F-8D16B26F9B62}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semana_03_Pipeline_Grafico", "Semana_03_Pipeline_Grafico", "{7083F49E-357F-8CCF-4338-8EE27C82705E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semana_05_Sintesis_Visual_Texturizado_3D", "Semana_05_Sintesis_Visual_Texturizado_3D", "{CC147764-3E13-38B1-D6C2-49ED5BB2AF42}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "semana_02_2__proyecciones_camara_virtual", "semana_02_2__proyecciones_camara_virtual", "{4F756601-2880-C508-62CD-DE678969EB63}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unity", "unity", "{0E98F6FE-D3AE-E8EC-06AB-E53B788D7CE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Semana_02_Geometria_Proyectiva\semana_02_2__proyecciones_camara_virtual\unity\Assembly-CSharp-Editor.csproj", "{578BF920-85CF-AB28-0C4D-B52F632B0AC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Semana_02_Geometria_Proyectiva\semana_02_2__proyecciones_camara_virtual\unity\Assembly-CSharp.csproj", "{9E6F5A7F-AEA7-5F9A-2063-C3064A3C41DE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "semana_03_2_zbuffer_depth_testing", "semana_03_2_zbuffer_depth_testing", "{F733FC25-626F-2E53-CB37-1CC9F9E04ACC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unity", "unity", "{762889E1-4496-4E52-DD6F-E4E1D51DF0B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Semana_03_Pipeline_Grafico\semana_03_2_zbuffer_depth_testing\unity\Assembly-CSharp-Editor.csproj", "{8E2BE5F5-042B-9C2C-A0A0-6EC82692C842}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Semana_03_Pipeline_Grafico\semana_03_2_zbuffer_depth_testing\unity\Assembly-CSharp.csproj", "{425B1806-98DB-C454-E5CE-7634C4358F69}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "semana_05_3_shaders_basicos", "semana_05_3_shaders_basicos", "{BFEA2D61-9918-E7FA-B5D9-2CC8F4ADA5E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unity", "unity", "{514B6689-6C3B-61FC-66B3-D1A84275F2BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Semana_05_Sintesis_Visual_Texturizado_3D\semana_05_3_shaders_basicos\unity\Assembly-CSharp-Editor.csproj", "{D066E828-7DD0-35AA-D1A0-4BC0B8A63026}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Semana_05_Sintesis_Visual_Texturizado_3D\semana_05_3_shaders_basicos\unity\Assembly-CSharp.csproj", "{0F1B9400-BE3C-9237-C570-19DD7CAF9E71}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "semana_02_4_transformaciones_homogeneas", "semana_02_4_transformaciones_homogeneas", "{8AC57869-0CB6-7444-0155-3D93988444D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity", "Unity", "{B8792A8F-1F61-4DF8-9B0F-8316763B9C53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "My project", "My project", "{2AD5CB21-6FB9-A423-0E52-BCC9848E53E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Semana_02_Geometria_Proyectiva\semana_02_4_transformaciones_homogeneas\Unity\My project\Assembly-CSharp-Editor.csproj", "{E3769388-3834-28DB-372D-6F75E8402002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Semana_02_Geometria_Proyectiva\semana_02_4_transformaciones_homogeneas\Unity\My project\Assembly-CSharp.csproj", "{EFCA08A2-CD9B-8665-8A0D-7B774A46C192}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "semana_03_4_etapas_pipeline_programable", "semana_03_4_etapas_pipeline_programable", "{D9E5E033-B21D-AC60-3D09-A9EC738CBEB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unity", "unity", "{3BC00617-9BF0-D47A-5032-13AD19A3B5CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipelinem", "pipelinem", "{B746E9F5-38D1-CF3D-F85D-FFFA4B9AEC8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Semana_03_Pipeline_Grafico\semana_03_4_etapas_pipeline_programable\unity\pipelinem\Assembly-CSharp-Editor.csproj", "{42B29C7D-7C33-E7DB-118F-9AAB8303C597}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Semana_03_Pipeline_Grafico\semana_03_4_etapas_pipeline_programable\unity\pipelinem\Assembly-CSharp.csproj", "{B624F35D-5E6C-EA32-85A0-C21145D9CDC1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{578BF920-85CF-AB28-0C4D-B52F632B0AC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578BF920-85CF-AB28-0C4D-B52F632B0AC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{578BF920-85CF-AB28-0C4D-B52F632B0AC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578BF920-85CF-AB28-0C4D-B52F632B0AC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E6F5A7F-AEA7-5F9A-2063-C3064A3C41DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E6F5A7F-AEA7-5F9A-2063-C3064A3C41DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E6F5A7F-AEA7-5F9A-2063-C3064A3C41DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E6F5A7F-AEA7-5F9A-2063-C3064A3C41DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2BE5F5-042B-9C2C-A0A0-6EC82692C842}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2BE5F5-042B-9C2C-A0A0-6EC82692C842}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2BE5F5-042B-9C2C-A0A0-6EC82692C842}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2BE5F5-042B-9C2C-A0A0-6EC82692C842}.Release|Any CPU.Build.0 = Release|Any CPU
+		{425B1806-98DB-C454-E5CE-7634C4358F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{425B1806-98DB-C454-E5CE-7634C4358F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{425B1806-98DB-C454-E5CE-7634C4358F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{425B1806-98DB-C454-E5CE-7634C4358F69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D066E828-7DD0-35AA-D1A0-4BC0B8A63026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D066E828-7DD0-35AA-D1A0-4BC0B8A63026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D066E828-7DD0-35AA-D1A0-4BC0B8A63026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D066E828-7DD0-35AA-D1A0-4BC0B8A63026}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F1B9400-BE3C-9237-C570-19DD7CAF9E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1B9400-BE3C-9237-C570-19DD7CAF9E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F1B9400-BE3C-9237-C570-19DD7CAF9E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F1B9400-BE3C-9237-C570-19DD7CAF9E71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3769388-3834-28DB-372D-6F75E8402002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3769388-3834-28DB-372D-6F75E8402002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3769388-3834-28DB-372D-6F75E8402002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3769388-3834-28DB-372D-6F75E8402002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFCA08A2-CD9B-8665-8A0D-7B774A46C192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFCA08A2-CD9B-8665-8A0D-7B774A46C192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFCA08A2-CD9B-8665-8A0D-7B774A46C192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFCA08A2-CD9B-8665-8A0D-7B774A46C192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42B29C7D-7C33-E7DB-118F-9AAB8303C597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42B29C7D-7C33-E7DB-118F-9AAB8303C597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42B29C7D-7C33-E7DB-118F-9AAB8303C597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42B29C7D-7C33-E7DB-118F-9AAB8303C597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B624F35D-5E6C-EA32-85A0-C21145D9CDC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B624F35D-5E6C-EA32-85A0-C21145D9CDC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B624F35D-5E6C-EA32-85A0-C21145D9CDC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B624F35D-5E6C-EA32-85A0-C21145D9CDC1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4F756601-2880-C508-62CD-DE678969EB63} = {6B25FF34-1EE2-D0A9-288F-8D16B26F9B62}
+		{0E98F6FE-D3AE-E8EC-06AB-E53B788D7CE0} = {4F756601-2880-C508-62CD-DE678969EB63}
+		{578BF920-85CF-AB28-0C4D-B52F632B0AC2} = {0E98F6FE-D3AE-E8EC-06AB-E53B788D7CE0}
+		{9E6F5A7F-AEA7-5F9A-2063-C3064A3C41DE} = {0E98F6FE-D3AE-E8EC-06AB-E53B788D7CE0}
+		{F733FC25-626F-2E53-CB37-1CC9F9E04ACC} = {7083F49E-357F-8CCF-4338-8EE27C82705E}
+		{762889E1-4496-4E52-DD6F-E4E1D51DF0B8} = {F733FC25-626F-2E53-CB37-1CC9F9E04ACC}
+		{8E2BE5F5-042B-9C2C-A0A0-6EC82692C842} = {762889E1-4496-4E52-DD6F-E4E1D51DF0B8}
+		{425B1806-98DB-C454-E5CE-7634C4358F69} = {762889E1-4496-4E52-DD6F-E4E1D51DF0B8}
+		{BFEA2D61-9918-E7FA-B5D9-2CC8F4ADA5E6} = {CC147764-3E13-38B1-D6C2-49ED5BB2AF42}
+		{514B6689-6C3B-61FC-66B3-D1A84275F2BA} = {BFEA2D61-9918-E7FA-B5D9-2CC8F4ADA5E6}
+		{D066E828-7DD0-35AA-D1A0-4BC0B8A63026} = {514B6689-6C3B-61FC-66B3-D1A84275F2BA}
+		{0F1B9400-BE3C-9237-C570-19DD7CAF9E71} = {514B6689-6C3B-61FC-66B3-D1A84275F2BA}
+		{8AC57869-0CB6-7444-0155-3D93988444D9} = {6B25FF34-1EE2-D0A9-288F-8D16B26F9B62}
+		{B8792A8F-1F61-4DF8-9B0F-8316763B9C53} = {8AC57869-0CB6-7444-0155-3D93988444D9}
+		{2AD5CB21-6FB9-A423-0E52-BCC9848E53E8} = {B8792A8F-1F61-4DF8-9B0F-8316763B9C53}
+		{E3769388-3834-28DB-372D-6F75E8402002} = {2AD5CB21-6FB9-A423-0E52-BCC9848E53E8}
+		{EFCA08A2-CD9B-8665-8A0D-7B774A46C192} = {2AD5CB21-6FB9-A423-0E52-BCC9848E53E8}
+		{D9E5E033-B21D-AC60-3D09-A9EC738CBEB7} = {7083F49E-357F-8CCF-4338-8EE27C82705E}
+		{3BC00617-9BF0-D47A-5032-13AD19A3B5CB} = {D9E5E033-B21D-AC60-3D09-A9EC738CBEB7}
+		{B746E9F5-38D1-CF3D-F85D-FFFA4B9AEC8F} = {3BC00617-9BF0-D47A-5032-13AD19A3B5CB}
+		{42B29C7D-7C33-E7DB-118F-9AAB8303C597} = {B746E9F5-38D1-CF3D-F85D-FFFA4B9AEC8F}
+		{B624F35D-5E6C-EA32-85A0-C21145D9CDC1} = {B746E9F5-38D1-CF3D-F85D-FFFA4B9AEC8F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D075043B-020A-4D98-BF51-C6B752EF9105}
+	EndGlobalSection
+EndGlobal
