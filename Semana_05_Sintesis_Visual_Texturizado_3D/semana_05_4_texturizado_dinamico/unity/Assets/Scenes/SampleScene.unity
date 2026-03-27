@@ -205,13 +205,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6649658, y: -0.00014176314, z: 0.00015332314, w: 0.7468738}
-  m_LocalPosition: {x: 1.1, y: 11.88, z: -1.65}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.5, y: -1, z: -108.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 83.359, y: -0.004, z: 0.02}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,6 +383,68 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &629093526 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+  m_PrefabInstance: {fileID: 764009268}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &764009268
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 790760999}
+    m_Modifications:
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355036606219008840, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8450232341041507689, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
+      propertyPath: m_Name
+      value: Purple Portal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1fc71093443f52f48b4ab783b2dc74c1, type: 3}
 --- !u!1 &790760995
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,13 +551,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 790760995}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 51.8, y: 0, z: -77.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 629093526}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 90}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
