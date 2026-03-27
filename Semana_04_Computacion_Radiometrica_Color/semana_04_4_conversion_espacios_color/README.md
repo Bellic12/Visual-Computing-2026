@@ -48,311 +48,185 @@ Todos los resultados mostrados a continuación se encuentran en la carpeta media
 
 ![python_input_image](./media/python_input_image.png)
 
-**Input Image (Imagen 1).**
-
-
-Imagen de entrada usada para ejecutar el taller: gradiente cromático con figuras geométricas primarias (círculo rojo, cuadrado verde y círculo azul), ideal para validar conversiones, segmentación y cambios de color.
+**Input Image (Imagen 1).** Imagen de entrada usada para ejecutar el taller: gradiente cromático con figuras geométricas primarias (círculo rojo, cuadrado verde y círculo azul), ideal para validar conversiones, segmentación y cambios de color.
 
 ![python_base_image_preview](./media/python_base_image_preview.png)
 
-**Base Image Preview (Imagen 2).**
-
-
-Vista previa de la imagen base renderizada con Matplotlib para verificar escala, composición y correcto cargado en el pipeline.
+**Base Image Preview (Imagen 2).** Vista previa de la imagen base renderizada con Matplotlib para verificar escala, composición y correcto cargado en el pipeline.
 
 ![python_gray_image](./media/python_gray_image.png)
 
-**Gray Image (Imagen 3).**
-
-
-Conversión directa de la imagen base a escala de grises, utilizada como referencia para operaciones de luminancia y ecualización.
+**Gray Image (Imagen 3).** Conversión directa de la imagen base a escala de grises, utilizada como referencia para operaciones de luminancia y ecualización.
 
 ### 2) Conversión entre espacios de color
 
 ![python_conversion_overview](./media/python_conversion_overview.png)
 
-**Conversion Overview (Imagen 4).**
-
-
-Comparativa general de conversiones RGB, HSV, HSL/HLS, LAB, YCrCb y Grayscale; permite observar diferencias perceptuales y de representación en cada espacio.
+**Conversion Overview (Imagen 4).** Comparativa general de conversiones RGB, HSV, HSL/HLS, LAB, YCrCb y Grayscale; permite observar diferencias perceptuales y de representación en cada espacio.
 
 ![python_channels_rgb](./media/python_channels_rgb.png)
 
-**Channels RGB (Imagen 5).**
-
-
-Descomposición por canales R, G y B; evidencia la contribución individual de cada canal en figuras y fondo.
+**Channels RGB (Imagen 5).** Descomposición por canales R, G y B; evidencia la contribución individual de cada canal en figuras y fondo.
 
 ![python_channels_hsv](./media/python_channels_hsv.png)
 
-**Channels HSV (Imagen 6).**
-
-
-Descomposición HSV (H, S, V); se aprecia separación entre matiz, saturación y brillo para facilitar segmentación por color.
+**Channels HSV (Imagen 6).** Descomposición HSV (H, S, V); se aprecia separación entre matiz, saturación y brillo para facilitar segmentación por color.
 
 ![python_channels_hsl](./media/python_channels_hsl.png)
 
-**Channels HSL (Imagen 7).**
-
-
-Descomposición HSL/HLS (H, L, S); muestra cómo el canal de luminosidad distribuye intensidad de forma distinta a HSV.
+**Channels HSL (Imagen 7).** Descomposición HSL/HLS (H, L, S); muestra cómo el canal de luminosidad distribuye intensidad de forma distinta a HSV.
 
 ![python_channels_lab](./media/python_channels_lab.png)
 
-**Channels LAB (Imagen 8).**
-
-
-Canales LAB (L, A, B); útil para separar luminancia de crominancia y realizar ajustes perceptualmente estables.
+**Channels LAB (Imagen 8).** Canales LAB (L, A, B); útil para separar luminancia de crominancia y realizar ajustes perceptualmente estables.
 
 ![python_channels_ycrcb](./media/python_channels_ycrcb.png)
 
-**Channels YCrCb (Imagen 9).**
-
-
-Canales YCrCb (Y, Cr, Cb); destaca la separación entre luminancia y componentes cromáticas roja/azul.
+**Channels YCrCb (Imagen 9).** Canales YCrCb (Y, Cr, Cb); destaca la separación entre luminancia y componentes cromáticas roja/azul.
 
 ### 3) Visualización de espacios de color
 
 ![python_rgb_3d_scatter](./media/python_rgb_3d_scatter.png)
 
-**RGB 3D Scatter (Imagen 10).**
-
-
-Nube de puntos en 3D del espacio RGB con muestreo de píxeles; describe la distribución real de colores presentes en la imagen.
+**RGB 3D Scatter (Imagen 10).** Nube de puntos en 3D del espacio RGB con muestreo de píxeles; describe la distribución real de colores presentes en la imagen.
 
 ![python_hsv_cylindrical_scatter](./media/python_hsv_cylindrical_scatter.png)
 
-**HSV Cylindrical Scatter (Imagen 11).**
-
-
-Representación cilíndrica aproximada de HSV (ángulo=H, radio=S, eje vertical=V), útil para interpretar tono y saturación de forma geométrica.
+**HSV Cylindrical Scatter (Imagen 11).** Representación cilíndrica aproximada de HSV (ángulo=H, radio=S, eje vertical=V), útil para interpretar tono y saturación de forma geométrica.
 
 ### 4) Segmentación por color en HSV
 
 ![python_mask_blue](./media/python_mask_blue.png)
 
-**Mask Blue (Imagen 12).**
-
-
-Máscara binaria del rango azul en HSV tras limpieza morfológica; blanco indica píxeles detectados como azules.
+**Mask Blue (Imagen 12).** Máscara binaria del rango azul en HSV tras limpieza morfológica; blanco indica píxeles detectados como azules.
 
 ![python_mask_green](./media/python_mask_green.png)
 
-**Mask Green (Imagen 13).**
-
-
-Máscara binaria del rango verde, afinada para retener principalmente el cuadrado verde y reducir ruido de fondo.
+**Mask Green (Imagen 13).** Máscara binaria del rango verde, afinada para retener principalmente el cuadrado verde y reducir ruido de fondo.
 
 ![python_mask_red](./media/python_mask_red.png)
 
-**Mask Red (Imagen 14).**
-
-
-Máscara binaria del rango rojo combinando dos intervalos de matiz (inicio y final del círculo HSV), necesaria por la naturaleza circular del canal H.
+**Mask Red (Imagen 14).** Máscara binaria del rango rojo combinando dos intervalos de matiz (inicio y final del círculo HSV), necesaria por la naturaleza circular del canal H.
 
 ![python_objects_blue](./media/python_objects_blue.png)
 
-**Objects Blue (Imagen 15).**
-
-
-Extracción de objetos azules aplicando la máscara azul sobre la imagen RGB original.
+**Objects Blue (Imagen 15).** Extracción de objetos azules aplicando la máscara azul sobre la imagen RGB original.
 
 ![python_objects_green](./media/python_objects_green.png)
 
-**Objects Green (Imagen 16).**
-
-
-Extracción de objetos verdes a partir de su máscara HSV y operación bitwise.
+**Objects Green (Imagen 16).** Extracción de objetos verdes a partir de su máscara HSV y operación bitwise.
 
 ![python_objects_red](./media/python_objects_red.png)
 
-**Objects Red (Imagen 17).**
-
-
-Extracción de objetos rojos resultante de la unión de máscaras en dos rangos de matiz.
+**Objects Red (Imagen 17).** Extracción de objetos rojos resultante de la unión de máscaras en dos rangos de matiz.
 
 ![python_objects_combined](./media/python_objects_combined.png)
 
-**Objects Combined (Imagen 18).**
-
-
-Combinación de detecciones azul, verde y rojo en una sola imagen segmentada.
+**Objects Combined (Imagen 18).** Combinación de detecciones azul, verde y rojo en una sola imagen segmentada.
 
 ![python_segmentation_summary](./media/python_segmentation_summary.png)
 
-**Segmentation Summary (Imagen 19).**
-
-
-Resumen visual de todo el proceso de segmentación: original, máscaras por color, objetos por color y resultado combinado.
+**Segmentation Summary (Imagen 19).** Resumen visual de todo el proceso de segmentación: original, máscaras por color, objetos por color y resultado combinado.
 
 ### 5) Manipulación de color
 
 ![python_manip_saturation_up](./media/python_manip_saturation_up.png)
 
-**Manip Saturation Up (Imagen 20).**
-
-
-Aumento global de saturación en HSV (factor 1.4), intensificando colores sin modificar de forma directa la luminancia.
+**Manip Saturation Up (Imagen 20).** Aumento global de saturación en HSV (factor 1.4), intensificando colores sin modificar de forma directa la luminancia.
 
 ![python_manip_hue_rotated](./media/python_manip_hue_rotated.png)
 
-**Manip Hue Rotated (Imagen 21).**
-
-
-Rotación de matiz +25 grados en HSV; desplaza tonos cromáticos manteniendo estructura de la escena.
+**Manip Hue Rotated (Imagen 21).** Rotación de matiz +25 grados en HSV; desplaza tonos cromáticos manteniendo estructura de la escena.
 
 ![python_manip_lab_luminance](./media/python_manip_lab_luminance.png)
 
-**Manip LAB Luminance (Imagen 22).**
-
-
-Ajuste de luminosidad sobre canal L en LAB, incrementando brillo de manera más perceptual que en RGB.
+**Manip LAB Luminance (Imagen 22).** Ajuste de luminosidad sobre canal L en LAB, incrementando brillo de manera más perceptual que en RGB.
 
 ![python_manip_hist_equalized_gray](./media/python_manip_hist_equalized_gray.png)
 
-**Manip Hist Equalized Gray (Imagen 23).**
-
-
-Ecualización de histograma en escala de grises para reforzar contraste local/global en intensidades.
+**Manip Hist Equalized Gray (Imagen 23).** Ecualización de histograma en escala de grises para reforzar contraste local/global en intensidades.
 
 ![python_manip_white_balance](./media/python_manip_white_balance.png)
 
-**Manip White Balance (Imagen 24).**
-
-
-Balance de blancos basado en Gray-World, compensando dominantes cromáticas mediante escalado por canal.
+**Manip White Balance (Imagen 24).** Balance de blancos basado en Gray-World, compensando dominantes cromáticas mediante escalado por canal.
 
 ![python_manipulation_summary](./media/python_manipulation_summary.png)
 
-**Manipulation Summary (Imagen 25).**
-
-
-Resumen comparativo de todas las manipulaciones de color aplicadas en esta etapa.
+**Manipulation Summary (Imagen 25).** Resumen comparativo de todas las manipulaciones de color aplicadas en esta etapa.
 
 ### 6) Color grading
 
 ![python_grading_lut_curves](./media/python_grading_lut_curves.png)
 
-**Grading LUT Curves (Imagen 26).**
-
-
-Aplicación de curvas LUT para re-mapear tonalidades y contraste en los tres canales de color.
+**Grading LUT Curves (Imagen 26).** Aplicación de curvas LUT para re-mapear tonalidades y contraste en los tres canales de color.
 
 ![python_grading_warm_tone](./media/python_grading_warm_tone.png)
 
-**Grading Warm Tone (Imagen 27).**
-
-
-Gradación cálida reforzando rojos y atenuando azules para una estética de temperatura alta.
+**Grading Warm Tone (Imagen 27).** Gradación cálida reforzando rojos y atenuando azules para una estética de temperatura alta.
 
 ![python_grading_cool_tone](./media/python_grading_cool_tone.png)
 
-**Grading Cool Tone (Imagen 28).**
-
-
-Gradación fría incrementando componente azul y moderando roja para un look de temperatura baja.
+**Grading Cool Tone (Imagen 28).** Gradación fría incrementando componente azul y moderando roja para un look de temperatura baja.
 
 ![python_grading_selective_color](./media/python_grading_selective_color.png)
 
-**Grading Selective Color (Imagen 29).**
-
-
-Ajuste selectivo de verdes usando máscara HSV para intervenir un rango cromático específico.
+**Grading Selective Color (Imagen 29).** Ajuste selectivo de verdes usando máscara HSV para intervenir un rango cromático específico.
 
 ![python_grading_instagram_style](./media/python_grading_instagram_style.png)
 
-**Grading Instagram Style (Imagen 30).**
-
-
-Filtro estilo Instagram/vintage combinando curva tonal suave y viñeteado radial.
+**Grading Instagram Style (Imagen 30).** Filtro estilo Instagram/vintage combinando curva tonal suave y viñeteado radial.
 
 ![python_grading_summary](./media/python_grading_summary.png)
 
-**Grading Summary (Imagen 31).**
-
-
-Composición resumen de resultados de color grading frente a la imagen original.
+**Grading Summary (Imagen 31).** Composición resumen de resultados de color grading frente a la imagen original.
 
 ### 7) Paletas y armonías cromáticas
 
 ![python_palette_dominant_colors](./media/python_palette_dominant_colors.png)
 
-**Palette Dominant Colors (Imagen 32).**
-
-
-Paleta dominante (7 colores) extraída por K-means, ordenada por frecuencia de aparición en la imagen.
+**Palette Dominant Colors (Imagen 32).** Paleta dominante (7 colores) extraída por K-means, ordenada por frecuencia de aparición en la imagen.
 
 ![python_palette_applied_quantized](./media/python_palette_applied_quantized.png)
 
-**Palette Applied Quantized (Imagen 33).**
-
-
-Imagen cuantizada usando centros de clúster de K-means para reducir variedad cromática conservando estructura.
+**Palette Applied Quantized (Imagen 33).** Imagen cuantizada usando centros de clúster de K-means para reducir variedad cromática conservando estructura.
 
 ![python_palette_complementary](./media/python_palette_complementary.png)
 
-**Palette Complementary (Imagen 34).**
-
-
-Armonía complementaria construida desde el color dominante y su opuesto en matiz.
+**Palette Complementary (Imagen 34).** Armonía complementaria construida desde el color dominante y su opuesto en matiz.
 
 ![python_palette_analogous](./media/python_palette_analogous.png)
 
-**Palette Analogous (Imagen 35).**
-
-
-Armonía análoga basada en desplazamientos pequeños de matiz alrededor del color dominante.
+**Palette Analogous (Imagen 35).** Armonía análoga basada en desplazamientos pequeños de matiz alrededor del color dominante.
 
 ![python_palette_triadic](./media/python_palette_triadic.png)
 
-**Palette Triadic (Imagen 36).**
-
-
-Armonía triádica generada con separación angular de matiz para alto contraste cromático balanceado.
+**Palette Triadic (Imagen 36).** Armonía triádica generada con separación angular de matiz para alto contraste cromático balanceado.
 
 ![python_palette_summary](./media/python_palette_summary.png)
 
-**Palette Summary (Imagen 37).**
-
-
-Resumen de paletas: dominante, cuantización aplicada y bloques de armonías complementaria/análoga/triádica.
+**Palette Summary (Imagen 37).** Resumen de paletas: dominante, cuantización aplicada y bloques de armonías complementaria/análoga/triádica.
 
 ### 8) Histogramas y realce
 
 ![python_histogram_rgb](./media/python_histogram_rgb.png)
 
-**Histogram RGB (Imagen 38).**
-
-
-Histograma por canales RGB de la imagen original, útil para identificar distribución de intensidades y picos por color.
+**Histogram RGB (Imagen 38).** Histograma por canales RGB de la imagen original, útil para identificar distribución de intensidades y picos por color.
 
 ![python_histogram_hsv](./media/python_histogram_hsv.png)
 
-**Histogram HSV (Imagen 39).**
-
-
-Histograma de canales HSV (H, S, V) para analizar comportamiento de matiz, saturación y valor.
+**Histogram HSV (Imagen 39).** Histograma de canales HSV (H, S, V) para analizar comportamiento de matiz, saturación y valor.
 
 ![python_histogram_clahe](./media/python_histogram_clahe.png)
 
-**Histogram CLAHE (Imagen 40).**
-
-
-Resultado de CLAHE aplicado sobre luminancia (canal L en LAB), mejorando contraste local sin sobreexposición global.
+**Histogram CLAHE (Imagen 40).** Resultado de CLAHE aplicado sobre luminancia (canal L en LAB), mejorando contraste local sin sobreexposición global.
 
 ![python_histogram_matching](./media/python_histogram_matching.png)
 
-**Histogram Matching (Imagen 41).**
-
-
-Resultado de histogram matching, ajustando la imagen original hacia la distribución tonal de una referencia cálida.
+**Histogram Matching (Imagen 41).** Resultado de histogram matching, ajustando la imagen original hacia la distribución tonal de una referencia cálida.
 
 ![python_histogram_summary](./media/python_histogram_summary.png)
 
-**Histogram Summary (Imagen 42).**
-
-
-Comparativa final entre original, CLAHE, referencia warm tone y salida de matching de histogramas.
+**Histogram Summary (Imagen 42).** Comparativa final entre original, CLAHE, referencia warm tone y salida de matching de histogramas.
 
 ---
 
