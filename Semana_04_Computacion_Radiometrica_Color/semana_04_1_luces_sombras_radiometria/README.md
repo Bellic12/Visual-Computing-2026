@@ -146,10 +146,23 @@ export default function App() {
 ```
 
 ## Prompts utilizados
+Durante el desarrollo del taller se utilizaron diferentes prompts para guiar la implementación técnica y resolver errores:
+
+```
+“Cómo implementar luces <ambientLight>, <pointLight> y <directionalLight> en Three.js”
+“Cómo habilitar sombras en React Three Fiber”
+“Cómo usar Leva para crear controles interactivos en React”
+“Errores de dependencias con React Three Fiber y cómo solucionarlos”
+“Compatibilidad entre versiones de Three.js, React y Drei”
+```
 
 
 ## Aprendizajes y dificultades
 
+Aprendizajes
+- Se entendió la relación entre materiales y luz:
+- Se evidenció cómo las sombras dependen de: la posición de la luz, la geometría de los objetos, la configuración de sombras (castShadow, receiveShadow)
+- Se aprendió a usar Leva para crear interfaces interactivas que permiten modificar parámetros en tiempo real.
 
 
 ## Contribuciones del grupo
