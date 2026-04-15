@@ -150,7 +150,6 @@ En esta entrega particular se documenta el sub-taller 6.4, manteniendo coherenci
 semana_06_4_cinematica_inversa_ik/
 ├── threejs/
 ├── media/
-├── semana_06_4_cinematica_inversa_ik.md
 └── README.md
 ```
 
