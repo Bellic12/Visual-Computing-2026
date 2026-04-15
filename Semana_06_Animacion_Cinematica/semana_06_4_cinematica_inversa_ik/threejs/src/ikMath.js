@@ -1,0 +1,1 @@
+export { clamp, solveCcd } from './ik/ikSolver'
