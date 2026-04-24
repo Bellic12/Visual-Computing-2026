@@ -1,2 +1,3 @@
-Semana_01*
-Semana_02*
+*.md
+!README.md
+!**/README.md
