@@ -237,9 +237,7 @@ semana_07_12_websockets_interaccion_visual/
 │   │   ├── App.css
 │   │   └── index.css
 │   └── package.json
-├── media/                # Evidencias visuales (pendientes)
-├── semana_07_12_websockets_interaccion_visual.md
-├── 04_plantilla_readme_entregas_talleres.md
+├── media/                # Evidencias visuales 
 └── README.md
 ```
 
