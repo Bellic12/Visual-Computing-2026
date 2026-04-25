@@ -1,0 +1,49 @@
+.app-shell {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: radial-gradient(1200px 600px at 20% 10%, #18203a 0%, #0b1020 55%, #080b16 100%);
+}
+
+.scene-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.scene-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+.btn {
+  pointer-events: all;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-2);
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px rgba(34, 211, 238, 0.3);
+  background: rgba(34, 211, 238, 0.2);
+}
+
+.btn-primary {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(255, 184, 107, 0.2), rgba(255, 80, 107, 0.18));
+}
+
+.btn-ghost {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+}

@@ -1,0 +1,58 @@
+.menu-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  padding: 32px;
+}
+
+.menu-card {
+  pointer-events: all;
+  max-width: 520px;
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 36px 40px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  text-align: left;
+}
+
+.menu-kicker {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.menu-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.05;
+  margin-bottom: 14px;
+}
+
+.menu-subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.menu-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .menu-card {
+    padding: 28px;
+  }
+
+  .menu-title {
+    font-size: 2.2rem;
+  }
+}
