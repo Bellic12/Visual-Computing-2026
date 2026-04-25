@@ -1,0 +1,28 @@
+:root {
+  --bg-1: #0b1020;
+  --bg-2: #111836;
+  --accent: #ffb86b;
+  --accent-2: #22d3ee;
+  --text: #f5f6fb;
+  --muted: #9aa3b9;
+  --glass: rgba(12, 16, 32, 0.72);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  font-family: 'Space Grotesk', 'Rajdhani', 'Trebuchet MS', sans-serif;
+  background: var(--bg-1);
+  color: var(--text);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+}

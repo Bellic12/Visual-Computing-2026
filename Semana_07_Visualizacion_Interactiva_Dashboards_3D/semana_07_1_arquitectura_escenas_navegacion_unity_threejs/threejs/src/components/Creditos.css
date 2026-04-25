@@ -1,0 +1,59 @@
+.credits-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.credits-card {
+  pointer-events: all;
+  width: min(560px, 92vw);
+  padding: 32px;
+  border-radius: 24px;
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  text-align: left;
+}
+
+.credits-card h1 {
+  margin-bottom: 12px;
+  font-size: 2rem;
+}
+
+.credits-card p {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.credits-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.credits-grid span {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.credits-grid strong {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.credits-list {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+  padding: 0;
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+}
