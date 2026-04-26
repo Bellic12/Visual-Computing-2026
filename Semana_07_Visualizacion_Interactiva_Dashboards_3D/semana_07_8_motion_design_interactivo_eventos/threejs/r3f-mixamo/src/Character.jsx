@@ -6,6 +6,7 @@ export default function Character() {
   const group = useRef();
 
   const { scene, animations } = useGLTF("/models/character.glb");
+  console.log(animations);
   const { actions, names } = useAnimations(animations, group);
 
   const [currentAction, setCurrentAction] = useState(null);
