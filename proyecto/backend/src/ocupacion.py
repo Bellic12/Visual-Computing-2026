@@ -24,6 +24,12 @@ class GeneradorOcupacion:
 
         return self._snapshot_indice_libre
 
+    def obtener_clave_snapshot(self, total_espacios: int) -> int:
+        """Returns the current snapshot key so other modules can detect when the state changes."""
+
+        self.obtener_indice_libre(total_espacios)
+        return self._snapshot_bucket
+
     def es_ocupado(self, indice: int, total_espacios: int) -> bool:
         """Returns True if the space at the given index should be occupied."""
 

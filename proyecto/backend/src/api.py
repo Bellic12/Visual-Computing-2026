@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import asyncio
+import json
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
 from detector import DetectorParqueadero
 from navegador import Navegador
@@ -33,6 +37,28 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+def construir_estado(entrada: str = "noroeste") -> dict:
+    espacios = detector.obtener_espacios()
+    ruta = navegador.calcular_ruta_optima(espacios, entrada=entrada)
+
+    return {
+        'entrada': ruta['entrada'],
+        'snapshot': detector.obtener_clave_snapshot(),
+        'espacios': [
+            {
+                'id': espacio.id,
+                'x': espacio.x,
+                'z': espacio.z,
+                'ocupado': espacio.ocupado,
+            }
+            for espacio in espacios
+        ],
+        'destino': ruta['destino'],
+        'ruta': ruta['ruta'],
+        'distancia': ruta['distancia'],
+    }
+
+
 @app.get("/espacios")
 def get_espacios() -> list[dict[str, str | float | bool]]:
     espacios = detector.obtener_espacios()
@@ -49,24 +75,25 @@ def get_espacios() -> list[dict[str, str | float | bool]]:
 
 @app.get("/estado")
 def get_estado(entrada: str = "noroeste") -> dict:
-    espacios = detector.obtener_espacios()
-    ruta = navegador.calcular_ruta_optima(espacios, entrada=entrada)
+    return construir_estado(entrada)
 
-    return {
-        'entrada': ruta['entrada'],
-        'espacios': [
-            {
-                'id': espacio.id,
-                'x': espacio.x,
-                'z': espacio.z,
-                'ocupado': espacio.ocupado,
-            }
-            for espacio in espacios
-        ],
-        'destino': ruta['destino'],
-        'ruta': ruta['ruta'],
-        'distancia': ruta['distancia'],
-    }
+
+@app.get("/suscripcion/estado")
+async def suscripcion_estado(entrada: str = "noroeste") -> StreamingResponse:
+    async def generar_eventos():
+        ultimo_snapshot = None
+
+        while True:
+            estado = construir_estado(entrada)
+            snapshot = estado['snapshot']
+
+            if snapshot != ultimo_snapshot:
+                yield f"event: estado\ndata: {json.dumps(estado)}\n\n"
+                ultimo_snapshot = snapshot
+
+            await asyncio.sleep(1)
+
+    return StreamingResponse(generar_eventos(), media_type="text/event-stream")
 
 
 @app.get("/ruta-optima")

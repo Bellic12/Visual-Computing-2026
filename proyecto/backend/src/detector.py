@@ -53,3 +53,8 @@ class DetectorParqueadero:
             resultado.append(Espacio(id=espacio_id, x=x, z=z, ocupado=ocupado))
 
         return resultado
+
+    def obtener_clave_snapshot(self) -> int:
+        """Returns the current occupancy snapshot key."""
+
+        return self._generador_ocupacion.obtener_clave_snapshot(len(self._espacios_px))
