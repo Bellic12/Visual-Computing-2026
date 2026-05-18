@@ -2,3 +2,43 @@
 !README.md
 !**/README.md
 .directory
+
+# Node.js / Three.js
+node_modules/
+.env
+.DS_Store
+*.log
+dist/
+build/
+.vscode/
+
+# Unity
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+MemoryCaptures/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.user
+
+# Python
+.ipynb_checkpoints/
+*.pyc
+__pycache__/
+.env
+venv/
+.venv/
+
+# Processing
+*.class
+*.jar
+*.exe
+*.log
+*.tmp
+*.svg
+*.zip
