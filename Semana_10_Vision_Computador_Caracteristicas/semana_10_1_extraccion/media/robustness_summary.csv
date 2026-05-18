@@ -1,0 +1,8 @@
+test,sift_kp,orb_kp
+original,1056,1000
+rotate_30,1113,1000
+rotate_60,1082,1000
+scale_0_7,972,1000
+scale_1_3,1033,1000
+illum_1_2_20,1097,1000
+illum_0_8_-20,934,993
