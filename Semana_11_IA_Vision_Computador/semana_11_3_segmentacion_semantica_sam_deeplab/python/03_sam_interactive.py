@@ -201,11 +201,11 @@ def main():
         print("No se encontraron imagenes. Ejecuta download_images.py primero.")
         return
 
-    for i, img_path in enumerate(image_files[:3]):
+    for i, img_path in enumerate(image_files[:2]):
         print(f"\n[{i+1}/{len(image_files)}] Procesando: {img_path.name}")
         image_rgb = load_image_rgb(img_path)
         img_pil = Image.fromarray(image_rgb)
-        img_pil.thumbnail((640, 640), Image.LANCZOS)
+        img_pil.thumbnail((480, 480), Image.LANCZOS)
         image_small = np.array(img_pil)
 
         process_image_with_sam(model, processor, image_small, device, img_path.stem)

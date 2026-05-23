@@ -44,72 +44,72 @@ El modulo `utils.py` contiene funciones compartidas para carga de imagenes, pale
 
 ## Resultados visuales
 
-Cada script genera salidas para **multiples imagenes de entrada** (13 imagenes en total), produciendo un total de **61 archivos de resultados** en `media/python/`. En esta seccion se documenta una **muestra representativa** (2-3 imagenes por script) para ilustrar el funcionamiento de cada algoritmo. La tabla siguiente detalla la cantidad total de imagenes generadas por cada script:
+Cada script genera salidas para **multiples imagenes de entrada** (13 imagenes en total), produciendo un total de **57 archivos de resultados** en `media/python/`. En esta seccion se documenta una **muestra representativa** (2-3 imagenes por script) para ilustrar el funcionamiento de cada algoritmo. La tabla siguiente detalla la cantidad total de imagenes generadas por cada script:
 
 | Script | Archivos generados | Descripcion |
 |--------|-------------------|-------------|
 | `01_deeplabv3_segmentation.py` | 26 (13 overviews + 13 mascaras binarias) | Una imagen por cada una de las 13 imagenes de entrada |
 | `02_sam_auto_segmentation.py` | 12 (4 composites + 4 individual + 4 metricas) | Procesa las primeras 4 imagenes |
-| `03_sam_interactive.py` | 9 (3 point + 3 bbox + 3 comparison) | Procesa las primeras 3 imagenes |
+| `03_sam_interactive.py` | 6 (2 point + 2 bbox + 2 comparison) | Procesa las primeras 2 imagenes |
 | `04_metrics_analysis.py` | 8 (3 comparison + 3 tables + 2 heatmaps) | Procesa las primeras 3 imagenes |
 | `05_batch_processing.py` | 7 (1 collage + 1 rendimiento + 5 detallados) | Procesa 5 imagenes en lote |
-| **Total** | **61** | |
+| **Total** | **57** | |
 
 Las imagenes mostradas a continuacion son una seleccion de este conjunto completo. Todos los archivos estan disponibles en `./media/python/`.
 
 ### Script 01: DeepLabV3 - Segmentacion Semantica
 
-![Overview DeepLabV3 - bear](./media/python/01_deeplabv3_bear_overview.png)
+![Overview DeepLabV3 - img_01](./media/python/01_deeplabv3_img_01_overview.png)
 
-*La imagen de entrada es un oso en un entorno natural (bosque). DeepLabV3 asigna un color unico a cada clase predefinida de PASCAL VOC que reconoce. En el panel central (mascara coloreada), el oso aparece en el color asignado a "persona" (aunque sea un animal) y el fondo arbolado en "planta". El panel derecho superpone la mascara coloreada sobre la foto original con transparencia, permitiendo ver la segmentacion directamente sobre la escena. DeepLabV3 detecto 2 categorias de las 21 posibles: persona (el oso, por su silueta erguida) y planta (los arboles detras).*
+*La imagen de entrada (img_01.jpg, 640x426) muestra a una persona en un interior. DeepLabV3 asigna un color unico a cada una de las 21 clases predefinidas de PASCAL VOC que reconoce. En el panel central (mascara coloreada), el modelo pinta de azul claro la region que clasifica como "persona" (32.8% de los pixeles de la imagen) y de rojo una pequena porcion como "planta" (0.3%). El panel derecho superpone la mascara coloreada sobre la foto original con transparencia (alpha=0.5), permitiendo ver la segmentacion directamente sobre la escena. Las clasificaciones de ImageNet indican que la persona esta usando un spray para el cabello o un telefono celular.*
 
-![Mascaras binarias DeepLabV3 - person_dog](./media/python/01_deeplabv3_person_dog_masks.png)
+![Mascaras binarias DeepLabV3 - img_12](./media/python/01_deeplabv3_img_12_masks.png)
 
-*Esta imagen muestra, ademas de la foto original como referencia visual, una mascara binaria independiente por cada clase que DeepLabV3 logro identificar. En la escena hay una persona sentada con un perro en un comedor interior. El modelo etiqueto correctamente: botella (sobre la mesa), silla (donde esta sentada la persona), mesa (la superficie central), persona, planta (maceta al fondo) y tv. Cada mascara binaria aparece en blanco sobre fondo negro, representando exactamente que pixeles pertenecen a cada categoria. La inclusion de la imagen original como primer panel permite comparar visualmente cada region segmentada con su correspondiente objeto en la escena.*
+*Esta imagen muestra, ademas de la foto original como referencia visual, una mascara binaria independiente por cada clase que DeepLabV3 logro identificar en img_12.jpg (640x426, escena interior estilo restaurante/comedor). El modelo etiqueto 6 categorias: botella (0.6% de pixeles), silla (2.6%), mesa (0.3%), persona (1.2%), planta (0.3%) y tv/monitor (5.6%). Cada mascara binaria aparece en blanco sobre fondo negro, representando exactamente que pixeles pertenecen a cada categoria. La inclusion de la imagen original como primer panel permite comparar visualmente cada region segmentada con su correspondiente objeto en la escena. DeepLabV3 asigna etiquetas de forma independiente por pixel, por lo que objetos pequenos o lejanos pueden ocupar porcentajes bajos del area total.*
 
 ### Script 02: SAM - Segmentacion Automatica
 
-![Composite SAM - bear](./media/python/02_sam_auto_bear_composite.png)
+![Composite SAM - img_01](./media/python/02_sam_auto_img_01_composite.png)
 
-*A diferencia de DeepLabV3, SAM no utiliza categorias predefinidas. En esta imagen se muestra el resultado de lanzar un grid de 256 puntos sobre la foto del oso. SAM genera una mascara candidata alrededor de cada punto y luego descarta las redundantes. Sobre la foto original se superponen con colores semitransparentes las 6 mascaras que sobrevivieron al filtro: una para el oso principal y varias para diferentes regiones del fondo (rocas, hojas, ramas). Cada mascara tiene un score de confianza que SAM autoestima; el histograma a la derecha muestra cuantos puntos de la imagen dieron lugar a mascaras con cada nivel de confianza.*
+*A diferencia de DeepLabV3, SAM no utiliza categorias predefinidas. En esta imagen se muestra el resultado de lanzar un grid de 256 puntos sobre img_01.jpg (persona en un interior). SAM genera 3 mascaras candidatas alrededor de cada punto (768 en total) y luego descarta las redundantes mediante supresion de no-maximos (NMS) con umbral IoU=0.7 y filtro de confianza score>0.85. Sobre la foto original se superponen con colores semitransparentes las 6 mascaras que sobrevivieron al filtro: una para la persona y varias para diferentes regiones del fondo (muebles, paredes, objetos). Cada mascara tiene un score de confianza que SAM autoestima; el histograma a la derecha muestra cuantos puntos de la imagen dieron lugar a mascaras con cada nivel de confianza.*
 
-![Metricas SAM - bike](./media/python/02_sam_auto_bike_metrics.png)
+![Metricas SAM - img_02](./media/python/02_sam_auto_img_02_metrics.png)
 
-*Este panel analiza numericamente las mascaras generadas automaticamente por SAM sobre una foto de bicicleta. A la izquierda, un histograma de areas muestra el rango de tamanos de las regiones detectadas (desde la bicicleta completa hasta detalles pequenos del fondo). A la derecha, otro histograma describe la longitud del contorno de cada mascara. En la parte inferior izquierda, los centroides de todas las mascaras se dibujan como puntos sobre las coordenadas de la imagen, revelando la distribucion espacial de las detecciones. El recuadro inferior derecho resume las estadisticas: score medio de 0.958, area promedio de ~183,000 pixeles y perimetro promedio de ~2,320 pixeles.*
+*Este panel analiza numericamente las mascaras generadas automaticamente por SAM sobre img_02.jpg (1280x1280, bicicleta de montana sobre un fondo natural). En los histogramas superiores se muestra la distribucion de areas (pixeles por mascara) y perimetros (longitud del borde en pixeles). En la grafica inferior izquierda, los centroides de todas las mascaras se dibujan como puntos sobre las coordenadas de la imagen, revelando la distribucion espacial de las detecciones (la bicicleta en el centro y el fondo alrededor). El recuadro inferior derecho resume: 6 mascaras detectadas, score promedio de 0.958, area promedio de ~183,000 pixeles y perimetro promedio de ~2,320 pixeles.*
 
 ### Script 03: SAM - Segmentacion Interactiva
 
-![Segmentacion por punto - bear](./media/python/03_sam_point_bear.png)
+![Segmentacion por punto - img_01](./media/python/03_sam_point_img_01.png)
 
-*En lugar de usar un grid automatico, esta vez se le indica a SAM un solo punto de referencia (marcado con una X roja en el centro del oso). A partir de ese punto, SAM genera 3 posibles interpretaciones de mascara. La primera (score 0.990) delimita casi perfectamente el contorno del oso. La segunda y tercera son variantes que incluyen mas o menos area del fondo. Esto se debe a que SAM siempre produce 3 hipotesis (multimask) para cubrir la ambiguedad de que exactamente quiere segmentar el usuario. El panel izquierdo muestra donde se hizo clic, y los tres paneles siguientes muestran cada hipotesis superpuesta en rojo semitransparente sobre la foto.*
+*En lugar de usar un grid automatico, esta vez se le indica a SAM un solo punto de referencia (marcado con una X roja en el centro de la imagen img_01.jpg, que muestra a una persona). A partir de ese punto, SAM genera 3 posibles interpretaciones de mascara (multimask output). La primera (score 0.990) delimita casi perfectamente el contorno de la persona. La segunda y tercera son variantes que incluyen mas o menos area del fondo (muebles, pared). Esto se debe a que SAM siempre produce 3 hipotesis para cubrir la ambiguedad de que exactamente quiere segmentar el usuario. El panel izquierdo muestra donde se hizo clic, y los tres paneles siguientes muestran cada hipotesis superpuesta en rojo semitransparente sobre la foto.*
 
-![Comparacion punto vs caja - bear](./media/python/03_sam_comparison_bear.png)
+![Comparacion punto vs caja - img_02](./media/python/03_sam_comparison_img_02.png)
 
-*A partir de la mejor mascara obtenida por punto, se calcula automaticamente una caja delimitadora que la envuelve. Luego se usa esa caja como segundo prompt para SAM. Los dos paneles izquierdos comparan la mejor mascara obtenida con punto (rojo, score 0.990) versus la mejor obtenida con caja (verde, score 0.997). El boxplot de la derecha muestra que los scores de las 3 mascaras generadas por caja son consistentemente mas altos que los obtenidos por punto, lo que indica que dar una caja como referencia reduce la ambiguedad para SAM.*
+*A partir de la mejor mascara obtenida por punto en img_02.jpg (bicicleta de montana), se calcula automaticamente una caja delimitadora que la envuelve. Luego se usa esa caja como segundo prompt para SAM. Los dos paneles izquierdos comparan la mejor mascara obtenida con punto (rojo) versus la mejor obtenida con caja (verde). El boxplot de la derecha muestra que los scores de las 3 mascaras generadas por caja son mas altos que los obtenidos por punto, lo que indica que dar una caja como referencia reduce la ambiguedad para SAM al restringir la region de busqueda.*
 
 ### Script 04: Metricas y Analisis Comparativo
 
-![Comparacion DeepLabV3 vs SAM - bear](./media/python/04_comparison_bear.png)
+![Comparacion DeepLabV3 vs SAM - img_01](./media/python/04_comparison_img_01.png)
 
-*La misma foto del oso procesada por ambos modelos lado a lado. A la izquierda, DeepLabV3 colorea en azul la region que clasifica como "persona" y en rojo la region "planta". A la derecha, SAM segmenta por instancias con colores aleatorios: el oso aparece como una unica region y el fondo se divide en varias (troncos separados del follaje). La diferencia fundamental es visible: DeepLabV3 etiqueta semanticamente cada pixel (que objeto ES), mientras que SAM separa objetos individuales (que objeto ESTA AHI), sin decir que son.*
+*La misma imagen img_01.jpg (persona en interior) procesada por ambos modelos lado a lado. A la izquierda, DeepLabV3 colorea la region que clasifica como "persona" y una pequena porcion como "planta". A la derecha, SAM segmenta por instancias con colores aleatorios: la persona aparece como una unica region y el fondo se divide en varias (muebles, paredes, objetos). La diferencia fundamental es visible: DeepLabV3 etiqueta semanticamente cada pixel (que objeto ES: persona, planta), mientras que SAM separa objetos individuales (que objeto ESTA AHI) sin decir que son.*
 
-![Matriz IoU DeepLabV3 vs SAM - bear](./media/python/04_iou_heatmap_bear.png)
+![Matriz IoU DeepLabV3 vs SAM - img_01](./media/python/04_iou_heatmap_img_01.png)
 
-*Esta matriz cuantifica el solapamiento entre las regiones que detecta DeepLabV3 y las que detecta SAM. Cada celda contiene el IoU entre una clase de DeepLabV3 (filas) y una mascara de SAM (columnas). El color mas intenso indica mayor solapamiento. La clase "persona" alcanza IoU=0.209 con la mascara SAM del oso, lo cual es esperable porque SAM captura el contorno exacto del animal mientras que DeepLabV3 clasifica a nivel de pixel con bordes mas gruesos. La clase "planta" tiene IoU muy bajo (0.003) porque SAM divide el fondo en multiples mascaras pequeñas mientras DeepLabV3 lo trata como una sola region.*
+*Esta matriz cuantifica el solapamiento entre las regiones que detecta DeepLabV3 y las que detecta SAM en img_01.jpg. Cada celda contiene el IoU (Intersection over Union) entre una clase de DeepLabV3 (filas: persona, planta) y una mascara de SAM (columnas: 3 mascaras). El color mas intenso indica mayor solapamiento. La clase "persona" alcanza IoU=0.209 con la mascara SAM de la persona, lo cual es esperable porque SAM captura el contorno exacto mientras DeepLabV3 clasifica a nivel de pixel con bordes mas gruesos. La clase "planta" tiene IoU muy bajo (0.003) porque SAM divide el fondo en multiples mascaras mientras DeepLabV3 lo trata como una sola region.*
 
-![Tabla de metricas - bear](./media/python/04_metrics_table_bear.png)
+![Tabla de metricas - img_01](./media/python/04_metrics_table_img_01.png)
 
-*Tabla numerica que desglosa cada region detectada por ambos metodos. Para cada region se muestra: tipo (DeepLabV3 o SAM), nombre de la clase o numero de mascara, area en numero de pixeles (que indica que tan grande es la region en la imagen), perimetro en pixeles (longitud del borde), y coordenadas (x, y) del centroide (el punto central de la region). Esto permite comparar cuantitativamente como de detallada es la segmentacion de cada metodo.*
+*Tabla numerica que desglosa cada region detectada por ambos metodos en img_01.jpg. Para cada region se muestra: tipo (DeepLabV3 o SAM), nombre de la clase o numero de mascara, area en pixeles (que indica que tan grande es la region en la imagen), perimetro en pixeles (longitud del borde), y coordenadas (x, y) del centroide (el punto central de la region). La region de "persona" de DeepLabV3 ocupa ~95,000 pixeles, mientras que las mascaras de SAM tienen areas entre 80,000 y 221,000 pixeles dependiendo de cuanta porcion del fondo incluyan.*
 
 ### Script 05: Procesamiento por Lotes
 
 ![Collage por lotes](./media/python/05_batch_collage_overview.png)
 
-*Collage que reune los resultados de 5 imagenes procesadas secuencialmente. Cada celda muestra la superposicion de mascaras de SAM sobre la foto original, junto con dos numeros: las clases que DeepLabV3 pudo identificar (e.g. "2 cls") y la cantidad de mascaras que SAM genero (e.g. "3 mascaras"). Esto permite apreciar de un vistazo como se comporta cada metodo frente a escenas muy distintas: un oso, una bicicleta, un pajaro, una botella y un coche.*
+*Collage que reune los resultados de 5 imagenes procesadas secuencialmente. Cada celda muestra la superposicion de mascaras de SAM sobre la foto original, junto con el numero de clases detectadas por DeepLabV3 (e.g. "2 cls" para img_01 que detecto persona+planta) y la cantidad de mascaras que SAM genero (tipicamente 3). Las 5 imagenes del collage son: img_01 (persona en interior), img_02 (bicicleta de montana), img_03 (oso pardo/no clasificada por DeepLabV3), img_04 (persona esquiando) e img_05 (escena interior con silla y planta).*
 
 ![Rendimiento DeepLabV3 vs SAM](./media/python/05_batch_performance_overview.png)
 
-*Graficos que comparan el rendimiento de ambos modelos en las mismas 5 imagenes. Arriba izquierda: tiempo de inferencia por imagen (DeepLabV3 tarda ~0.2s, SAM tarda ~0.9s en GPU). Arriba derecha: cantidad de clases detectadas por DeepLabV3 (tipicamente 1-2) vs mascaras generadas por SAM (siempre 3 con el grid usado). Abajo izquierda: grafico de correlacion donde se ve que DeepLabV3 encuentra pocas clases mientras SAM siempre encuentra 3 mascaras, reflejando filosofias distintas. Abajo derecha: resumen estadistico del lote.*
+*Graficos que comparan el rendimiento de ambos modelos en las mismas 5 imagenes. Arriba izquierda: tiempo de inferencia por imagen (DeepLabV3 tarda ~0.2s, SAM tarda ~0.9s en GPU RTX 2050). Arriba derecha: cantidad de clases detectadas por DeepLabV3 (tipicamente 1-2) vs mascaras generadas por SAM (siempre 3 con el grid usado y filtro de confianza). Abajo izquierda: grafico de correlacion que muestra que DeepLabV3 encuentra pocas clases mientras SAM siempre encuentra 3 mascaras, reflejando filosofias distintas (semantica vs instancias). Abajo derecha: resumen estadistico del lote con promedios.*
 
 ---
 
@@ -251,21 +251,21 @@ semana_11_3_segmentacion_semantica_sam_deeplab/
 │   └── .venv/
 ├── media/
 │   ├── input/
-│   │   ├── bear.jpg
-│   │   ├── bike.jpg
-│   │   ├── bird.jpg
-│   │   ├── bottle.jpg
-│   │   ├── car.jpg
-│   │   ├── cat.jpg
-│   │   ├── chair.jpg
-│   │   ├── elephant.jpg
-│   │   ├── giraffe.jpg
-│   │   ├── horse.jpg
-│   │   ├── motorcycle.jpg
-│   │   ├── person_dog.jpg
-│   │   └── zebra.jpg
+│   │   ├── img_01.jpg
+│   │   ├── img_02.jpg
+│   │   ├── img_03.jpg
+│   │   ├── img_04.jpg
+│   │   ├── img_05.jpg
+│   │   ├── img_06.jpg
+│   │   ├── img_07.jpg
+│   │   ├── img_08.jpg
+│   │   ├── img_09.jpg
+│   │   ├── img_10.jpg
+│   │   ├── img_11.jpg
+│   │   ├── img_12.jpg
+│   │   └── img_13.jpg
 │   └── python/
-│       └── (61 archivos de resultados — ver tabla en Resultados visuales)
+│       └── (57 archivos de resultados — ver tabla en Resultados visuales)
 ├── semana_11_3_segmentacion_semantica_sam_deeplab.md
 ├── 04_plantilla_readme_entregas_talleres.md
 └── README.md
