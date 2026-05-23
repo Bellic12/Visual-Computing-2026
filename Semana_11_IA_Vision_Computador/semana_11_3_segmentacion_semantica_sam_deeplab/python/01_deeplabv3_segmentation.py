@@ -85,18 +85,24 @@ def plot_results(image_rgb, mask_idx, filename_base):
     if n_classes == 0:
         return
 
-    cols = min(4, n_classes)
-    rows = (n_classes + cols - 1) // cols
+    n_total = n_classes + 1
+    cols = min(4, n_total)
+    rows = (n_total + cols - 1) // cols
     fig2, axes2 = plt.subplots(rows, cols, figsize=(5 * cols, 4 * rows))
     axes2 = axes2.flatten() if rows * cols > 1 else [axes2]
 
-    for idx, cls in enumerate(detected):
-        binary = (mask_idx == cls).astype(np.uint8) * 255
-        axes2[idx].imshow(binary, cmap='gray')
-        axes2[idx].set_title(f'{PASCAL_CLASSES[cls]} (ID {cls})')
-        axes2[idx].axis('off')
+    axes2[0].imshow(image_rgb)
+    axes2[0].set_title('Original', fontsize=10, fontweight='bold')
+    axes2[0].axis('off')
 
-    for idx in range(n_classes, len(axes2)):
+    for idx, cls in enumerate(detected):
+        pos = idx + 1
+        binary = (mask_idx == cls).astype(np.uint8) * 255
+        axes2[pos].imshow(binary, cmap='gray')
+        axes2[pos].set_title(f'{PASCAL_CLASSES[cls]} (ID {cls})')
+        axes2[pos].axis('off')
+
+    for idx in range(n_total, len(axes2)):
         axes2[idx].axis('off')
 
     fig2.suptitle(f'Mascaras binarias por clase - {filename_base}', fontsize=14)
