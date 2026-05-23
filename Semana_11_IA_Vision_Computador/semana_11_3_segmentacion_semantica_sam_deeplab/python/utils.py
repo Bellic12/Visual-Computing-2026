@@ -157,32 +157,90 @@ def compute_circularity(mask):
     return compute_compactness(mask)
 
 
-def filter_masks_by_ratio(mask, min_ratio=0.2, max_ratio=5.0):
+def compute_perimeter_area_irregularity(mask):
+    area = compute_mask_area(mask)
+    perim = compute_mask_perimeter(mask)
+    if area == 0:
+        return 0.0
+    return perim / area
+
+
+def filter_masks_by_ratio(mask, min_ratio=0.5, max_ratio=3.5):
     ratio = compute_bbox_aspect_ratio(mask)
     if ratio is None:
         return False
     return min_ratio <= ratio <= max_ratio
 
 
-def filter_masks_by_coverage(mask, max_pct=50.0, min_pct=0.05):
+def filter_masks_by_coverage(mask, max_pct=40.0, min_pct=0.05):
     cov = compute_coverage_pct(mask)
     return min_pct <= cov <= max_pct
 
 
-def filter_masks_by_area(mask, min_area=400, image_area=None):
+def filter_masks_by_area(mask, min_area=600, image_area=None):
     area = compute_mask_area(mask)
     if area < min_area:
         return False
-    if image_area is not None and area > image_area * 0.85:
+    if image_area is not None and area > image_area * 0.75:
         return False
     return True
+
+
+def compute_mask_quality_score(mask, score, compactness_weight=0.3, irregularity_weight=0.2):
+    area = compute_mask_area(mask)
+    perim = compute_mask_perimeter(mask)
+    comp = compute_compactness(mask)
+    irreg = perim / max(area, 1)
+    irreg_norm = min(irreg / 0.1, 1.0)
+    return score * (1.0 - compactness_weight - irregularity_weight) + comp * compactness_weight + (1.0 - irreg_norm) * irregularity_weight
+
+
+def compute_iou_matrix(masks):
+    n = len(masks)
+    matrix = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            matrix[i, j] = compute_iou(masks[i], masks[j])
+    return matrix
+
+
+def smart_iou_redundancy_filter(masks, scores, iou_threshold=0.85, compactness_weight=0.3, irregularity_weight=0.2):
+    n = len(masks)
+    if n <= 1:
+        return list(range(n)), {}
+
+    iou_mat = compute_iou_matrix(masks)
+    quality = np.array([compute_mask_quality_score(masks[i], scores[i], compactness_weight, irregularity_weight) for i in range(n)])
+
+    keep = []
+    discarded_info = {}
+    assigned = set()
+
+    sorted_by_quality = np.argsort(quality)[::-1]
+
+    for idx in sorted_by_quality:
+        if idx in assigned:
+            continue
+        keep.append(idx)
+        assigned.add(idx)
+        for j in range(n):
+            if j not in assigned and iou_mat[idx, j] > iou_threshold:
+                assigned.add(j)
+                discarded_info[j] = {
+                    'reason': f'IoU_{iou_mat[idx,j]:.2f}_con_{idx}',
+                    'kept_idx': idx,
+                    'kept_quality': quality[idx],
+                    'discarded_quality': quality[j],
+                    'iou': iou_mat[idx, j]
+                }
+
+    return keep, discarded_info
 
 
 def enhanced_nms(masks, scores, iou_threshold=0.5, score_threshold=0.85):
     flat_scores = scores.flatten()
     sorted_idxs = np.argsort(flat_scores)[::-1]
     keep = []
-    kept_indices = set()
     for idx in sorted_idxs:
         if flat_scores[idx] < score_threshold:
             continue
@@ -193,21 +251,21 @@ def enhanced_nms(masks, scores, iou_threshold=0.5, score_threshold=0.85):
                 break
         if not redundant:
             keep.append(idx)
-            kept_indices.add(idx)
     return keep
 
 
 def filter_background_masks(masks, scores, img_h, img_w, discarded_reasons=None,
                              max_coverage=40.0, min_coverage=0.05,
-                             min_ratio=0.2, max_ratio=5.0,
-                             min_compactness=0.01,
-                             min_area=400):
+                             min_ratio=0.5, max_ratio=3.5,
+                             min_compactness=0.03,
+                             min_area=600):
     image_area = img_h * img_w
     keep = []
     for i in range(len(masks)):
         reasons = []
         if not filter_masks_by_area(masks[i], min_area=min_area, image_area=image_area):
-            reasons.append('area_fuera_rango')
+            area_val = compute_mask_area(masks[i])
+            reasons.append(f'area_{area_val}')
         if not filter_masks_by_coverage(masks[i], max_pct=max_coverage, min_pct=min_coverage):
             cov = compute_coverage_pct(masks[i])
             reasons.append(f'cobertura_{cov:.1f}%')
@@ -227,9 +285,10 @@ def filter_background_masks(masks, scores, img_h, img_w, discarded_reasons=None,
 
 def filter_pipeline(masks, scores, img_h, img_w,
                     max_coverage=40.0, min_coverage=0.05,
-                    min_ratio=0.2, max_ratio=5.0,
-                    min_compactness=0.01, min_area=400,
-                    nms_iou=0.5, nms_score=0.85):
+                    min_ratio=0.5, max_ratio=3.5,
+                    min_compactness=0.03, min_area=600,
+                    nms_iou=0.5, nms_score=0.85,
+                    smart_iou_threshold=0.85):
     n_before = len(masks)
 
     bg_keep = filter_background_masks(
@@ -246,12 +305,22 @@ def filter_pipeline(masks, scores, img_h, img_w,
     keep = enhanced_nms(masks, scores, iou_threshold=nms_iou, score_threshold=nms_score)
     masks = masks[keep]
     scores = scores[keep]
+    n_after_nms = len(masks)
 
-    print(f"    Filtro: {n_before} -> fondo/textura: {n_before - n_after_bg} "
-          f"| NMS: {n_after_bg - len(masks)} "
+    smart_keep, smart_discarded = smart_iou_redundancy_filter(
+        masks, scores, iou_threshold=smart_iou_threshold
+    )
+    masks = masks[smart_keep]
+    scores = scores[smart_keep]
+    n_smart_discarded = n_after_nms - len(masks)
+
+    print(f"    Filtro: {n_before} -> geo: {n_before - n_after_bg} "
+          f"| NMS: {n_after_bg - n_after_nms} "
+          f"| redundantes: {n_smart_discarded} "
           f"| final: {len(masks)}")
     return masks, scores, {
         'fondo': n_before - n_after_bg,
-        'nms': n_after_bg - len(masks),
+        'nms': n_after_bg - n_after_nms,
+        'redundantes': n_smart_discarded,
         'total_descartadas': n_before - len(masks)
-    }
+    }, smart_discarded

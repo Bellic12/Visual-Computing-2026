@@ -44,16 +44,16 @@ El modulo `utils.py` contiene funciones compartidas para carga de imagenes, pale
 
 ## Resultados visuales
 
-Cada script genera salidas para **multiples imagenes de entrada** (13 imagenes en total), produciendo un total de **59 archivos de resultados** en `media/python/`. En esta seccion se documenta una **muestra representativa** (2-3 imagenes por script) para ilustrar el funcionamiento de cada algoritmo. La tabla siguiente detalla la cantidad total de imagenes generadas por cada script:
+Cada script genera salidas para **multiples imagenes de entrada** (13 imagenes en total), produciendo un total de **59+ archivos de resultados** en `media/python/`. En esta seccion se documenta una **muestra representativa** (2-3 imagenes por script) para ilustrar el funcionamiento de cada algoritmo. La tabla siguiente detalla la cantidad total de imagenes generadas por cada script:
 
 | Script | Archivos generados | Descripcion |
 |--------|-------------------|-------------|
 | `01_deeplabv3_segmentation.py` | 26 (13 overviews + 13 mascaras binarias) | Una imagen por cada una de las 13 imagenes de entrada |
-| `02_sam_auto_segmentation.py` | 12 (4 composites + 4 metricas + 4 resumenes finales) | Procesa las primeras 4 imagenes |
+| `02_sam_auto_segmentation.py` | 12 (4 composites + 4 metricas + 4 resumenes finales) + comparacion filtrado | Procesa las primeras 4 imagenes |
 | `03_sam_interactive.py` | 6 (2 point + 2 bbox + 2 comparison) | Procesa las primeras 2 imagenes |
 | `04_metrics_analysis.py` | 8 (3 comparison + 3 tables + 2 heatmaps) | Procesa las primeras 3 imagenes |
 | `05_batch_processing.py` | 7 (1 collage + 1 rendimiento + 5 detallados) | Procesa 5 imagenes en lote |
-| **Total** | **59** | |
+| **Total** | **59+** | |
 
 Las imagenes mostradas a continuacion son una seleccion de este conjunto completo. Todos los archivos estan disponibles en `./media/python/`.
 
@@ -69,13 +69,17 @@ Las imagenes mostradas a continuacion son una seleccion de este conjunto complet
 
 ### Script 02: SAM - Segmentacion Automatica
 
-![Analisis completo SAM - img_01](./media/python/02_sam_auto_img_01_composite.png)
+![Analisis completo SAM - img_02](./media/python/02_sam_auto_img_02_composite.png)
 
-*SAM genera mascaras a partir de un grid de 256 puntos organizados en lotes de 64. Cada lote de puntos se procesa como un unico prompt multipunto, por lo que SAM produce 3 mascaras candidatas (multimask) por lote, totalizando 12 mascaras crudas. Luego se aplica un pipeline de filtrado en tres etapas: (1) filtro geometrico que descarta mascaras con area fuera de rango (400 px - 85% de la imagen), cobertura excesiva (max 40%) o muy baja (min 0.05%), relacion de aspecto extrema (0.2-5.0) y compacidad insuficiente (< 0.01) para eliminar regiones de textura irregular como fondos; (2) supresion de no-maximos (NMS) con IoU=0.5 para eliminar redundancias. En img_01.jpg (personas al aire libre), de 12 mascaras crudas se descartan 9 por fondo/textura y 1 por NMS, quedando 2 mascaras finales que corresponden a distintas regiones de las personas.*
+*SAM genera mascaras a partir de un grid de 256 puntos organizados en lotes de 64. Cada lote genera 3 mascaras multimask, totalizando 12 mascaras crudas. El pipeline de filtrado aplica tres etapas secuenciales: (1) filtros geometricos — area entre 600 px y 75% de la imagen, cobertura entre 0.05% y 40%, relacion de aspecto W/H entre 0.5 y 3.5, compacidad minima de 0.03; (2) NMS con IoU=0.5 y score minimo 0.85; (3) filtro de redundancia inteligente que descarta mascaras con IoU > 0.85 conservando la de mejor calidad compuesta (score, compacidad e irregularidad perimetro/area). En img_02.jpg (bicicleta frente a puerta metalica corrugada), de 12 mascaras crudas: 7 descartadas por geometria, 3 por NMS, quedando 2 mascaras finales — el cuadro de la bicicleta y las ruedas — sin que las lineas horizontales de la puerta corrugada generen falsas detecciones.*
 
 ![Metricas detalladas SAM - img_02](./media/python/02_sam_auto_img_02_metrics.png)
 
-*Panel de metricas detalladas para img_02.jpg (1280x1280, bicicleta frente a una puerta metalica corrugada de garaje). Los histogramas superiores muestran la distribucion de areas y perimetros con la media marcada como linea punteada. El histograma inferior izquierdo muestra la cobertura (% de la imagen), indicando que las mascaras que sobreviven al filtro ocupan entre 22% y 37% de la imagen. La compacidad (4πA/P²) cuantifica que tan compacta es cada region (1.0 = circulo perfecto); las mascaras de fondos texturados tienen compacidad muy baja y son descartadas. El grafico de centroides (inferior derecho) usa color para indicar el score de confianza de cada mascara, con ejes escalados correctamente (aspect ratio igual, limites 0-ancho y alto-0) para reflejar la distribucion espacial real. Los filtros geometricos (cobertura < 40%, compacidad > 0.01, relacion de aspecto 0.2-5.0) redujeron las 12 mascaras crudas a solo 2, eliminando las regiones generadas por la textura repetitiva de la puerta corrugada.*
+*Panel de metricas detalladas para img_02.jpg. Los histogramas muestran la distribucion de areas (con media marcada), perimetros, relacion de aspecto, cobertura y compacidad de las 2 mascaras finales. El grafico de centroides (inferior derecho) usa escala correcta (aspect ratio igual, ejes acotados a las dimensiones de la imagen) con color indicando el score de confianza SAM. La compacidad mide que tan irregular es cada mascara (1.0 = circulo); las mascaras de la puerta corrugada tienen compacidad < 0.03 y son descartadas automaticamente.*
+
+![Comparacion antes/despues del filtrado - img_02](./media/python/02_sam_auto_img_02_filtering_comparison.png)
+
+*Comparacion lado a lado del efecto del pipeline de filtrado sobre img_02.jpg. El panel izquierdo superior muestra las 12 mascaras crudas superpuestas (muchas cubriendo la puerta corrugada). El panel derecho superior muestra solo las 2 mascaras finales (bicicleta). La matriz IoU en la parte inferior cuantifica el solapamiento entre mascaras finales. La tabla de ranking muestra para cada mascara: score SAM, area, compacidad, cobertura, relacion de aspecto e IoU maximo contra otras mascaras. El panel derecho inferior detalla cuantas mascaras fueron descartadas en cada etapa (geometrico: 7, NMS: 3) con una tasa de retencion de 16.7%.*
 
 ### Script 03: SAM - Segmentacion Interactiva
 
@@ -213,7 +217,7 @@ y genera graficos comparativos de rendimiento"
 
 Este taller permitio comprender en profundidad las diferencias fundamentales entre la segmentacion semantica clasica (DeepLabV3, basada en clasificacion por pixel con categorias predefinidas) y la segmentacion por instancias con modelos foundation (SAM, basada en atencion y prompts). DeepLabV3 demuestra ser eficiente (0.24s por imagen en GPU) y proporciona etiquetas semanticas interpretables, pero limitado a 21 clases predefinidas. SAM, aunque mas lento (0.89s por imagen), ofrece una granularidad mucho mayor al poder segmentar cualquier objeto sin necesidad de entrenamiento previo, y su capacidad interactiva (puntos/cajas) lo hace ideal para aplicaciones donde se requiere intervencion del usuario.
 
-Se desarrollo un pipeline de filtrado en tres etapas (geometrico + NMS + metricas de calidad) que hace a SAM robusto frente a fondos texturados industrialmente, como puertas metalicas corrugadas. Los filtros de cobertura (< 40% de la imagen), compacidad (> 0.01), relacion de aspecto (0.2-5.0) y area (400 px - 85% de la imagen) eliminan eficazmente las mascaras generadas por texturas repetitivas, reteniendo solo los objetos significativos. Las metricas adicionales (compacidad, cobertura, relacion de aspecto, circularidad) proporcionan informacion mas completa que area y perimetro por si solos.
+Se desarrollo un pipeline de filtrado en tres etapas (geometrico + NMS + redundancia inteligente) que hace a SAM robusto frente a fondos texturados industrialmente, como puertas metalicas corrugadas. Los filtros geometricos de cobertura (< 40% de la imagen), compacidad (> 0.03), relacion de aspecto (0.5-3.5) y area (600 px - 75% de la imagen) eliminan eficazmente las mascaras generadas por texturas repetitivas. La redundancia inteligente descarta mascaras con IoU > 0.85 conservando la de mejor calidad compuesta (score + compacidad + irregularidad perimetro/area). Las metricas adicionales (compacidad, cobertura, relacion de aspecto, irregularidad perimetro/area, IoU entre mascaras) proporcionan informacion mas completa que area y perimetro por si solos. La visualizacion de comparacion antes/despues permite inspeccionar el efecto del pipeline sobre cada imagen.
 
 ### Dificultades
 
@@ -267,7 +271,7 @@ semana_11_3_segmentacion_semantica_sam_deeplab/
 │   │   ├── img_12.jpg
 │   │   └── img_13.jpg
 │   └── python/
-│       └── (59 archivos de resultados — ver tabla en Resultados visuales)
+│       └── (59+ archivos de resultados — ver tabla en Resultados visuales)
 ├── semana_11_3_segmentacion_semantica_sam_deeplab.md
 ├── 04_plantilla_readme_entregas_talleres.md
 └── README.md

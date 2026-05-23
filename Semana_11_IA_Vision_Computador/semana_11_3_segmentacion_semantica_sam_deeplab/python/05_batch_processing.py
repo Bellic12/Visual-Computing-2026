@@ -213,7 +213,7 @@ def main():
                                    interpolation=cv2.INTER_NEAREST)
             masks_bin_list.append((m_resized > 0).astype(np.uint8))
         masks_bin = np.array(masks_bin_list)
-        masks_bin, scores, _ = filter_pipeline(masks_bin, scores, h_orig, w_orig)
+        masks_bin, scores, _, _ = filter_pipeline(masks_bin, scores, h_orig, w_orig)
 
         dl_classes = len([c for c in np.unique(dl_mask)
                          if 0 < c < len(PASCAL_CLASSES)])

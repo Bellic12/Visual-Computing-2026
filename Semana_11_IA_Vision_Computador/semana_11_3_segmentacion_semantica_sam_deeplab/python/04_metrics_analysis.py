@@ -255,7 +255,7 @@ def main():
                                    interpolation=cv2.INTER_NEAREST)
             masks_resized_list.append((m_resized > 0).astype(np.uint8))
         masks_bin = np.array(masks_resized_list)
-        masks_bin, scores, _ = filter_pipeline(masks_bin, scores, h_orig, w_orig)
+        masks_bin, scores, _, _ = filter_pipeline(masks_bin, scores, h_orig, w_orig)
 
         stem = img_path.stem
         print(f"  DeepLabV3: {len(np.unique(dl_mask))-1} clases, "
