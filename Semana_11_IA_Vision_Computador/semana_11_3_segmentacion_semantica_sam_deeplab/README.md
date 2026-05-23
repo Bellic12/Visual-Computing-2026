@@ -44,6 +44,19 @@ El modulo `utils.py` contiene funciones compartidas para carga de imagenes, pale
 
 ## Resultados visuales
 
+Cada script genera salidas para **multiples imagenes de entrada** (13 imagenes en total), produciendo un total de **61 archivos de resultados** en `media/python/`. En esta seccion se documenta una **muestra representativa** (2-3 imagenes por script) para ilustrar el funcionamiento de cada algoritmo. La tabla siguiente detalla la cantidad total de imagenes generadas por cada script:
+
+| Script | Archivos generados | Descripcion |
+|--------|-------------------|-------------|
+| `01_deeplabv3_segmentation.py` | 26 (13 overviews + 13 mascaras binarias) | Una imagen por cada una de las 13 imagenes de entrada |
+| `02_sam_auto_segmentation.py` | 12 (4 composites + 4 individual + 4 metricas) | Procesa las primeras 4 imagenes |
+| `03_sam_interactive.py` | 9 (3 point + 3 bbox + 3 comparison) | Procesa las primeras 3 imagenes |
+| `04_metrics_analysis.py` | 8 (3 comparison + 3 tables + 2 heatmaps) | Procesa las primeras 3 imagenes |
+| `05_batch_processing.py` | 7 (1 collage + 1 rendimiento + 5 detallados) | Procesa 5 imagenes en lote |
+| **Total** | **61** | |
+
+Las imagenes mostradas a continuacion son una seleccion de este conjunto completo. Todos los archivos estan disponibles en `./media/python/`.
+
 ### Script 01: DeepLabV3 - Segmentacion Semantica
 
 ![Overview DeepLabV3 - bear](./media/python/01_deeplabv3_bear_overview.png)
@@ -246,7 +259,7 @@ semana_11_3_segmentacion_semantica_sam_deeplab/
 │   │   ├── person_dog.jpg
 │   │   └── zebra.jpg
 │   └── python/
-│       └── (61 archivos de resultados)
+│       └── (61 archivos de resultados — ver tabla en Resultados visuales)
 ├── semana_11_3_segmentacion_semantica_sam_deeplab.md
 ├── 04_plantilla_readme_entregas_talleres.md
 └── README.md
