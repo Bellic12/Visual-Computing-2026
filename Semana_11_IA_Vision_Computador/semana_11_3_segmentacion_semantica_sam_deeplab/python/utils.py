@@ -115,3 +115,143 @@ def compute_iou(mask1, mask2):
     if union == 0:
         return 0.0
     return intersection / union
+
+
+def compute_bbox(mask):
+    binary = (mask > 0).astype(np.uint8)
+    ys, xs = np.where(binary)
+    if len(xs) == 0 or len(ys) == 0:
+        return None
+    return int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
+
+
+def compute_bbox_aspect_ratio(mask):
+    bbox = compute_bbox(mask)
+    if bbox is None:
+        return None
+    x1, y1, x2, y2 = bbox
+    w = x2 - x1 + 1
+    h = y2 - y1 + 1
+    if h == 0:
+        return None
+    return w / h
+
+
+def compute_coverage_pct(mask):
+    h, w = mask.shape[:2]
+    total_px = h * w
+    if total_px == 0:
+        return 0.0
+    return (compute_mask_area(mask) / total_px) * 100.0
+
+
+def compute_compactness(mask):
+    area = compute_mask_area(mask)
+    perim = compute_mask_perimeter(mask)
+    if perim == 0 or area == 0:
+        return 0.0
+    return (4 * np.pi * area) / (perim * perim)
+
+
+def compute_circularity(mask):
+    return compute_compactness(mask)
+
+
+def filter_masks_by_ratio(mask, min_ratio=0.2, max_ratio=5.0):
+    ratio = compute_bbox_aspect_ratio(mask)
+    if ratio is None:
+        return False
+    return min_ratio <= ratio <= max_ratio
+
+
+def filter_masks_by_coverage(mask, max_pct=50.0, min_pct=0.05):
+    cov = compute_coverage_pct(mask)
+    return min_pct <= cov <= max_pct
+
+
+def filter_masks_by_area(mask, min_area=400, image_area=None):
+    area = compute_mask_area(mask)
+    if area < min_area:
+        return False
+    if image_area is not None and area > image_area * 0.85:
+        return False
+    return True
+
+
+def enhanced_nms(masks, scores, iou_threshold=0.5, score_threshold=0.85):
+    flat_scores = scores.flatten()
+    sorted_idxs = np.argsort(flat_scores)[::-1]
+    keep = []
+    kept_indices = set()
+    for idx in sorted_idxs:
+        if flat_scores[idx] < score_threshold:
+            continue
+        redundant = False
+        for k in keep:
+            if compute_iou(masks[idx], masks[k]) > iou_threshold:
+                redundant = True
+                break
+        if not redundant:
+            keep.append(idx)
+            kept_indices.add(idx)
+    return keep
+
+
+def filter_background_masks(masks, scores, img_h, img_w, discarded_reasons=None,
+                             max_coverage=40.0, min_coverage=0.05,
+                             min_ratio=0.2, max_ratio=5.0,
+                             min_compactness=0.01,
+                             min_area=400):
+    image_area = img_h * img_w
+    keep = []
+    for i in range(len(masks)):
+        reasons = []
+        if not filter_masks_by_area(masks[i], min_area=min_area, image_area=image_area):
+            reasons.append('area_fuera_rango')
+        if not filter_masks_by_coverage(masks[i], max_pct=max_coverage, min_pct=min_coverage):
+            cov = compute_coverage_pct(masks[i])
+            reasons.append(f'cobertura_{cov:.1f}%')
+        if not filter_masks_by_ratio(masks[i], min_ratio=min_ratio, max_ratio=max_ratio):
+            ratio = compute_bbox_aspect_ratio(masks[i])
+            reasons.append(f'aspecto_{ratio:.2f}')
+        comp = compute_compactness(masks[i])
+        if comp < min_compactness:
+            reasons.append(f'baja_compacidad_{comp:.4f}')
+        if reasons:
+            if discarded_reasons is not None:
+                discarded_reasons[i] = reasons
+        else:
+            keep.append(i)
+    return keep
+
+
+def filter_pipeline(masks, scores, img_h, img_w,
+                    max_coverage=40.0, min_coverage=0.05,
+                    min_ratio=0.2, max_ratio=5.0,
+                    min_compactness=0.01, min_area=400,
+                    nms_iou=0.5, nms_score=0.85):
+    n_before = len(masks)
+
+    bg_keep = filter_background_masks(
+        masks, scores, img_h, img_w,
+        max_coverage=max_coverage, min_coverage=min_coverage,
+        min_ratio=min_ratio, max_ratio=max_ratio,
+        min_compactness=min_compactness, min_area=min_area
+    )
+
+    masks = masks[bg_keep]
+    scores = scores[bg_keep]
+    n_after_bg = len(masks)
+
+    keep = enhanced_nms(masks, scores, iou_threshold=nms_iou, score_threshold=nms_score)
+    masks = masks[keep]
+    scores = scores[keep]
+
+    print(f"    Filtro: {n_before} -> fondo/textura: {n_before - n_after_bg} "
+          f"| NMS: {n_after_bg - len(masks)} "
+          f"| final: {len(masks)}")
+    return masks, scores, {
+        'fondo': n_before - n_after_bg,
+        'nms': n_after_bg - len(masks),
+        'total_descartadas': n_before - len(masks)
+    }

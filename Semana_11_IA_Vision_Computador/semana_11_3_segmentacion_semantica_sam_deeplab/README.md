@@ -44,16 +44,16 @@ El modulo `utils.py` contiene funciones compartidas para carga de imagenes, pale
 
 ## Resultados visuales
 
-Cada script genera salidas para **multiples imagenes de entrada** (13 imagenes en total), produciendo un total de **57 archivos de resultados** en `media/python/`. En esta seccion se documenta una **muestra representativa** (2-3 imagenes por script) para ilustrar el funcionamiento de cada algoritmo. La tabla siguiente detalla la cantidad total de imagenes generadas por cada script:
+Cada script genera salidas para **multiples imagenes de entrada** (13 imagenes en total), produciendo un total de **59 archivos de resultados** en `media/python/`. En esta seccion se documenta una **muestra representativa** (2-3 imagenes por script) para ilustrar el funcionamiento de cada algoritmo. La tabla siguiente detalla la cantidad total de imagenes generadas por cada script:
 
 | Script | Archivos generados | Descripcion |
 |--------|-------------------|-------------|
 | `01_deeplabv3_segmentation.py` | 26 (13 overviews + 13 mascaras binarias) | Una imagen por cada una de las 13 imagenes de entrada |
-| `02_sam_auto_segmentation.py` | 12 (4 composites + 4 individual + 4 metricas) | Procesa las primeras 4 imagenes |
+| `02_sam_auto_segmentation.py` | 12 (4 composites + 4 metricas + 4 resumenes finales) | Procesa las primeras 4 imagenes |
 | `03_sam_interactive.py` | 6 (2 point + 2 bbox + 2 comparison) | Procesa las primeras 2 imagenes |
 | `04_metrics_analysis.py` | 8 (3 comparison + 3 tables + 2 heatmaps) | Procesa las primeras 3 imagenes |
 | `05_batch_processing.py` | 7 (1 collage + 1 rendimiento + 5 detallados) | Procesa 5 imagenes en lote |
-| **Total** | **57** | |
+| **Total** | **59** | |
 
 Las imagenes mostradas a continuacion son una seleccion de este conjunto completo. Todos los archivos estan disponibles en `./media/python/`.
 
@@ -61,7 +61,7 @@ Las imagenes mostradas a continuacion son una seleccion de este conjunto complet
 
 ![Overview DeepLabV3 - img_01](./media/python/01_deeplabv3_img_01_overview.png)
 
-*La imagen de entrada (img_01.jpg, 640x426) muestra a una persona en un interior. DeepLabV3 asigna un color unico a cada una de las 21 clases predefinidas de PASCAL VOC que reconoce. En el panel central (mascara coloreada), el modelo pinta de azul claro la region que clasifica como "persona" (32.8% de los pixeles de la imagen) y de rojo una pequena porcion como "planta" (0.3%). El panel derecho superpone la mascara coloreada sobre la foto original con transparencia (alpha=0.5), permitiendo ver la segmentacion directamente sobre la escena. Las clasificaciones de ImageNet indican que la persona esta usando un spray para el cabello o un telefono celular.*
+*La imagen de entrada (img_01.jpg, 640x426) muestra una escena al aire libre. DeepLabV3 asigna un color unico a cada una de las 21 clases predefinidas de PASCAL VOC que reconoce. En el panel central (mascara coloreada), el modelo pinta de rojo claro/rosado la region que clasifica como "persona" (32.8% de los pixeles de la imagen) y de verde oscuro la region "planta" (0.3%). El panel derecho superpone la mascara coloreada sobre la foto original con transparencia (alpha=0.5), permitiendo ver la segmentacion directamente sobre la escena.*
 
 ![Mascaras binarias DeepLabV3 - img_12](./media/python/01_deeplabv3_img_12_masks.png)
 
@@ -69,47 +69,47 @@ Las imagenes mostradas a continuacion son una seleccion de este conjunto complet
 
 ### Script 02: SAM - Segmentacion Automatica
 
-![Composite SAM - img_01](./media/python/02_sam_auto_img_01_composite.png)
+![Analisis completo SAM - img_01](./media/python/02_sam_auto_img_01_composite.png)
 
-*A diferencia de DeepLabV3, SAM no utiliza categorias predefinidas. En esta imagen se muestra el resultado de lanzar un grid de 256 puntos sobre img_01.jpg (persona en un interior). SAM genera 3 mascaras candidatas alrededor de cada punto (768 en total) y luego descarta las redundantes mediante supresion de no-maximos (NMS) con umbral IoU=0.7 y filtro de confianza score>0.85. Sobre la foto original se superponen con colores semitransparentes las 6 mascaras que sobrevivieron al filtro: una para la persona y varias para diferentes regiones del fondo (muebles, paredes, objetos). Cada mascara tiene un score de confianza que SAM autoestima; el histograma a la derecha muestra cuantos puntos de la imagen dieron lugar a mascaras con cada nivel de confianza.*
+*SAM genera mascaras a partir de un grid de 256 puntos organizados en lotes de 64. Cada lote de puntos se procesa como un unico prompt multipunto, por lo que SAM produce 3 mascaras candidatas (multimask) por lote, totalizando 12 mascaras crudas. Luego se aplica un pipeline de filtrado en tres etapas: (1) filtro geometrico que descarta mascaras con area fuera de rango (400 px - 85% de la imagen), cobertura excesiva (max 40%) o muy baja (min 0.05%), relacion de aspecto extrema (0.2-5.0) y compacidad insuficiente (< 0.01) para eliminar regiones de textura irregular como fondos; (2) supresion de no-maximos (NMS) con IoU=0.5 para eliminar redundancias. En img_01.jpg (personas al aire libre), de 12 mascaras crudas se descartan 9 por fondo/textura y 1 por NMS, quedando 2 mascaras finales que corresponden a distintas regiones de las personas.*
 
-![Metricas SAM - img_02](./media/python/02_sam_auto_img_02_metrics.png)
+![Metricas detalladas SAM - img_02](./media/python/02_sam_auto_img_02_metrics.png)
 
-*Este panel analiza numericamente las mascaras generadas automaticamente por SAM sobre img_02.jpg (1280x1280, bicicleta de montana sobre un fondo natural). En los histogramas superiores se muestra la distribucion de areas (pixeles por mascara) y perimetros (longitud del borde en pixeles). En la grafica inferior izquierda, los centroides de todas las mascaras se dibujan como puntos sobre las coordenadas de la imagen, revelando la distribucion espacial de las detecciones (la bicicleta en el centro y el fondo alrededor). El recuadro inferior derecho resume: 6 mascaras detectadas, score promedio de 0.958, area promedio de ~183,000 pixeles y perimetro promedio de ~2,320 pixeles.*
+*Panel de metricas detalladas para img_02.jpg (1280x1280, bicicleta frente a una puerta metalica corrugada de garaje). Los histogramas superiores muestran la distribucion de areas y perimetros con la media marcada como linea punteada. El histograma inferior izquierdo muestra la cobertura (% de la imagen), indicando que las mascaras que sobreviven al filtro ocupan entre 22% y 37% de la imagen. La compacidad (4πA/P²) cuantifica que tan compacta es cada region (1.0 = circulo perfecto); las mascaras de fondos texturados tienen compacidad muy baja y son descartadas. El grafico de centroides (inferior derecho) usa color para indicar el score de confianza de cada mascara, con ejes escalados correctamente (aspect ratio igual, limites 0-ancho y alto-0) para reflejar la distribucion espacial real. Los filtros geometricos (cobertura < 40%, compacidad > 0.01, relacion de aspecto 0.2-5.0) redujeron las 12 mascaras crudas a solo 2, eliminando las regiones generadas por la textura repetitiva de la puerta corrugada.*
 
 ### Script 03: SAM - Segmentacion Interactiva
 
 ![Segmentacion por punto - img_01](./media/python/03_sam_point_img_01.png)
 
-*En lugar de usar un grid automatico, esta vez se le indica a SAM un solo punto de referencia (marcado con una X roja en el centro de la imagen img_01.jpg, que muestra a una persona). A partir de ese punto, SAM genera 3 posibles interpretaciones de mascara (multimask output). La primera (score 0.990) delimita casi perfectamente el contorno de la persona. La segunda y tercera son variantes que incluyen mas o menos area del fondo (muebles, pared). Esto se debe a que SAM siempre produce 3 hipotesis para cubrir la ambiguedad de que exactamente quiere segmentar el usuario. El panel izquierdo muestra donde se hizo clic, y los tres paneles siguientes muestran cada hipotesis superpuesta en rojo semitransparente sobre la foto.*
+*En lugar de usar un grid automatico, esta vez se le indica a SAM un solo punto de referencia (marcado con una X roja en la imagen img_01.jpg, donde aparecen varias personas al aire libre). A partir de ese punto, SAM genera 3 posibles interpretaciones de mascara (multimask output). La primera (score 0.990) delimita la camiseta de la persona principal. La segunda y tercera son variantes que incluyen mas o menos area del contorno de la persona. Esto se debe a que SAM siempre produce 3 hipotesis para cubrir la ambiguedad de que exactamente quiere segmentar el usuario. El panel izquierdo muestra donde se hizo clic, y los tres paneles siguientes muestran cada hipotesis superpuesta en rojo semitransparente sobre la foto.*
 
 ![Comparacion punto vs caja - img_02](./media/python/03_sam_comparison_img_02.png)
 
-*A partir de la mejor mascara obtenida por punto en img_02.jpg (bicicleta de montana), se calcula automaticamente una caja delimitadora que la envuelve. Luego se usa esa caja como segundo prompt para SAM. Los dos paneles izquierdos comparan la mejor mascara obtenida con punto (rojo) versus la mejor obtenida con caja (verde). El boxplot de la derecha muestra que los scores de las 3 mascaras generadas por caja son mas altos que los obtenidos por punto, lo que indica que dar una caja como referencia reduce la ambiguedad para SAM al restringir la region de busqueda.*
+*A partir de la mejor mascara obtenida por punto en img_02.jpg (bicicleta frente a puerta metalica corrugada de garaje), se calcula automaticamente una caja delimitadora que la envuelve. Luego se usa esa caja como segundo prompt para SAM. Los dos paneles izquierdos comparan la mejor mascara obtenida con punto (rojo) versus la mejor obtenida con caja (verde). El boxplot de la derecha muestra que los scores de las 3 mascaras generadas por caja son mas altos que los obtenidos por punto, lo que indica que dar una caja como referencia reduce la ambiguedad para SAM al restringir la region de busqueda.*
 
 ### Script 04: Metricas y Analisis Comparativo
 
 ![Comparacion DeepLabV3 vs SAM - img_01](./media/python/04_comparison_img_01.png)
 
-*La misma imagen img_01.jpg (persona en interior) procesada por ambos modelos lado a lado. A la izquierda, DeepLabV3 colorea la region que clasifica como "persona" y una pequena porcion como "planta". A la derecha, SAM segmenta por instancias con colores aleatorios: la persona aparece como una unica region y el fondo se divide en varias (muebles, paredes, objetos). La diferencia fundamental es visible: DeepLabV3 etiqueta semanticamente cada pixel (que objeto ES: persona, planta), mientras que SAM separa objetos individuales (que objeto ESTA AHI) sin decir que son.*
+*La misma imagen img_01.jpg (personas al aire libre) procesada por ambos modelos lado a lado. A la izquierda, DeepLabV3 colorea la region que clasifica como "persona" (rojo claro/rosado) y una pequena porcion como "planta" (verde oscuro). A la derecha, SAM segmenta por instancias con colores aleatorios: distintas regiones de las personas y sus prendas aparecen como mascaras separadas. La diferencia fundamental es visible: DeepLabV3 etiqueta semanticamente cada pixel (que objeto ES: persona, planta), mientras que SAM separa objetos individuales (que objeto ESTA AHI) sin decir que son.*
 
-![Matriz IoU DeepLabV3 vs SAM - img_01](./media/python/04_iou_heatmap_img_01.png)
+![Matriz IoU DeepLabV3 vs SAM - img_02](./media/python/04_iou_heatmap_img_02.png)
 
-*Esta matriz cuantifica el solapamiento entre las regiones que detecta DeepLabV3 y las que detecta SAM en img_01.jpg. Cada celda contiene el IoU (Intersection over Union) entre una clase de DeepLabV3 (filas: persona, planta) y una mascara de SAM (columnas: 3 mascaras). El color mas intenso indica mayor solapamiento. La clase "persona" alcanza IoU=0.209 con la mascara SAM de la persona, lo cual es esperable porque SAM captura el contorno exacto mientras DeepLabV3 clasifica a nivel de pixel con bordes mas gruesos. La clase "planta" tiene IoU muy bajo (0.003) porque SAM divide el fondo en multiples mascaras mientras DeepLabV3 lo trata como una sola region.*
+*Esta matriz cuantifica el solapamiento entre las regiones que detecta DeepLabV3 y las que detecta SAM en img_02.jpg (bicicleta frente a puerta metalica corrugada). Cada celda contiene el IoU entre la clase de DeepLabV3 (fila: bicicleta) y la mascara de SAM (columna: 1 mascara). El color mas intenso indica mayor solapamiento. La clase "bicicleta" de DeepLabV3 alcanza IoU=0.212 con la unica mascara de SAM que sobrevivio al filtro geometrico. Este IoU moderado se debe a que DeepLabV3 clasifica la bicicleta completa, mientras que SAM tiende a segmentar solo la porcion central de mayor confianza. Las otras 5 mascaras crudas de SAM fueron descartadas por filtros de cobertura (>40% de la imagen) o compacidad insuficiente (<0.01), correspondiendo a regiones de la puerta corrugada del fondo.*
 
-![Tabla de metricas - img_01](./media/python/04_metrics_table_img_01.png)
+![Tabla de metricas - img_02](./media/python/04_metrics_table_img_02.png)
 
-*Tabla numerica que desglosa cada region detectada por ambos metodos en img_01.jpg. Para cada region se muestra: tipo (DeepLabV3 o SAM), nombre de la clase o numero de mascara, area en pixeles (que indica que tan grande es la region en la imagen), perimetro en pixeles (longitud del borde), y coordenadas (x, y) del centroide (el punto central de la region). La region de "persona" de DeepLabV3 ocupa ~95,000 pixeles, mientras que las mascaras de SAM tienen areas entre 80,000 y 221,000 pixeles dependiendo de cuanta porcion del fondo incluyan.*
+*Tabla numerica que desglosa cada region detectada por ambos metodos en img_02.jpg (bicicleta frente a garaje). Para cada region se muestra: tipo (DeepLabV3 o SAM), nombre de la clase o numero de mascara, area en pixeles (que indica que tan grande es la region en la imagen), perimetro en pixeles (longitud del borde), y coordenadas (x, y) del centroide (el punto central de la region). DeepLabV3 detecta la clase "bicicleta" ocupando ~520,000 pixeles (~31.7% de la imagen), mientras que la unica mascara de SAM que supero los filtros geometricos ocupa ~291,000 pixeles. Las demas mascaras crudas de SAM fueron descartadas por cubrir mas del 40% de la imagen (fondos de la puerta corrugada) o tener compacidad inferior a 0.01.*
 
 ### Script 05: Procesamiento por Lotes
 
 ![Collage por lotes](./media/python/05_batch_collage_overview.png)
 
-*Collage que reune los resultados de 5 imagenes procesadas secuencialmente. Cada celda muestra la superposicion de mascaras de SAM sobre la foto original, junto con el numero de clases detectadas por DeepLabV3 (e.g. "2 cls" para img_01 que detecto persona+planta) y la cantidad de mascaras que SAM genero (tipicamente 3). Las 5 imagenes del collage son: img_01 (persona en interior), img_02 (bicicleta de montana), img_03 (oso pardo/no clasificada por DeepLabV3), img_04 (persona esquiando) e img_05 (escena interior con silla y planta).*
+*Collage que reune los resultados de 5 imagenes procesadas secuencialmente con el pipeline de filtrado mejorado. Cada celda muestra la superposicion de mascaras de SAM sobre la foto original, junto con el numero de clases detectadas por DeepLabV3 y la cantidad de mascaras que SAM retuvo tras los filtros geometricos (cobertura < 40%, compacidad > 0.01, relacion de aspecto 0.2-5.0, NMS con IoU=0.5). Las 5 imagenes son: img_01 (personas al aire libre: 2 clases DL, 1 mascara SAM), img_02 (bicicleta frente a puerta metalica corrugada: 1 clase DL, 1 mascara SAM), img_03 (oso pardo/sin clase DL: 0 mascaras SAM, fondo texturado descartado), img_04 (persona esquiando: 1 clase DL, 0 mascaras SAM) e img_05 (escena interior con silla y planta: 2 clases DL, 2 mascaras SAM).*
 
 ![Rendimiento DeepLabV3 vs SAM](./media/python/05_batch_performance_overview.png)
 
-*Graficos que comparan el rendimiento de ambos modelos en las mismas 5 imagenes. Arriba izquierda: tiempo de inferencia por imagen (DeepLabV3 tarda ~0.2s, SAM tarda ~0.9s en GPU RTX 2050). Arriba derecha: cantidad de clases detectadas por DeepLabV3 (tipicamente 1-2) vs mascaras generadas por SAM (siempre 3 con el grid usado y filtro de confianza). Abajo izquierda: grafico de correlacion que muestra que DeepLabV3 encuentra pocas clases mientras SAM siempre encuentra 3 mascaras, reflejando filosofias distintas (semantica vs instancias). Abajo derecha: resumen estadistico del lote con promedios.*
+*Graficos que comparan el rendimiento de ambos modelos en las mismas 5 imagenes. Arriba izquierda: tiempo de inferencia por imagen (DeepLabV3 tarda ~0.2s, SAM tarda ~0.9s en GPU RTX 2050). Arriba derecha: cantidad de clases detectadas por DeepLabV3 vs mascaras de SAM tras filtros geometricos (1-2 mascaras tipicamente, ya que los fondos texturados como puertas corrugadas son eliminados por cobertura y compacidad). Abajo izquierda: grafico de correlacion que muestra que SAM retiene mascaras solo cuando estas pasan los filtros de calidad. Abajo derecha: resumen estadistico del lote con promedios.*
 
 ---
 
@@ -213,9 +213,11 @@ y genera graficos comparativos de rendimiento"
 
 Este taller permitio comprender en profundidad las diferencias fundamentales entre la segmentacion semantica clasica (DeepLabV3, basada en clasificacion por pixel con categorias predefinidas) y la segmentacion por instancias con modelos foundation (SAM, basada en atencion y prompts). DeepLabV3 demuestra ser eficiente (0.24s por imagen en GPU) y proporciona etiquetas semanticas interpretables, pero limitado a 21 clases predefinidas. SAM, aunque mas lento (0.89s por imagen), ofrece una granularidad mucho mayor al poder segmentar cualquier objeto sin necesidad de entrenamiento previo, y su capacidad interactiva (puntos/cajas) lo hace ideal para aplicaciones donde se requiere intervencion del usuario.
 
+Se desarrollo un pipeline de filtrado en tres etapas (geometrico + NMS + metricas de calidad) que hace a SAM robusto frente a fondos texturados industrialmente, como puertas metalicas corrugadas. Los filtros de cobertura (< 40% de la imagen), compacidad (> 0.01), relacion de aspecto (0.2-5.0) y area (400 px - 85% de la imagen) eliminan eficazmente las mascaras generadas por texturas repetitivas, reteniendo solo los objetos significativos. Las metricas adicionales (compacidad, cobertura, relacion de aspecto, circularidad) proporcionan informacion mas completa que area y perimetro por si solos.
+
 ### Dificultades
 
-La principal dificultad fue la integracion de SAM a traves de la libreria transformers de HuggingFace, ya que la API difiere significativamente del repositorio original de Meta. Fue necesario comprender el formato esperado de los tensores de entrada (puntos como listas de floats, no arrays numpy) y manejar correctamente las dimensiones de salida (3 mascaras por punto debido a multimask_output). La gestion de resoluciones tambien presento desafios: SAM opera internamente a 640x640 mientras que las imagenes originales son de hasta 1280x1280, requiriendo reescalado de mascaras. La supresion de no-maximos para mascaras 2D requirio una implementacion personalizada.
+La principal dificultad fue la integracion de SAM a traves de la libreria transformers de HuggingFace, ya que la API difiere significativamente del repositorio original de Meta. Fue necesario comprender el formato esperado de los tensores de entrada (puntos como listas de floats, no arrays numpy) y manejar correctamente las dimensiones de salida (3 mascaras por punto debido a multimask_output). La gestion de resoluciones tambien presento desafios: SAM opera internamente a 640x640 mientras que las imagenes originales son de hasta 1280x1280, requiriendo reescalado de mascaras. La supresion de no-maximos para mascaras 2D requirio una implementacion personalizada. Adicionalmente, fondos con texturas repetitivas (como puertas metalicas corrugadas) generaban mascaras espurias que fue necesario eliminar mediante filtros geometricos de cobertura, compacidad y relacion de aspecto, ademas del NMS estandar.
 
 ### Mejoras futuras
 
@@ -265,7 +267,7 @@ semana_11_3_segmentacion_semantica_sam_deeplab/
 │   │   ├── img_12.jpg
 │   │   └── img_13.jpg
 │   └── python/
-│       └── (57 archivos de resultados — ver tabla en Resultados visuales)
+│       └── (59 archivos de resultados — ver tabla en Resultados visuales)
 ├── semana_11_3_segmentacion_semantica_sam_deeplab.md
 ├── 04_plantilla_readme_entregas_talleres.md
 └── README.md

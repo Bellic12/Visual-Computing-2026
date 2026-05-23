@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from utils import (
     load_image_rgb, save_and_display, PASCAL_CLASSES, PASCAL_COLORS,
     compute_mask_area, compute_mask_perimeter, compute_mask_centroid,
-    compute_iou, INPUT_DIR, get_device
+    compute_iou, filter_pipeline, INPUT_DIR, get_device
 )
 from PIL import Image
 
@@ -55,16 +55,20 @@ def process_single_image(image_rgb, deeplab_mask, sam_masks, sam_scores, stem):
     axes[0].set_title(f'DeepLabV3 - {n_detected} clases')
     axes[0].axis('off')
 
-    sam_overlay = image_rgb.copy().astype(np.float32)
-    for i, mask in enumerate(sam_masks[:50]):
-        color = colors[i % len(colors)].astype(np.float32)
-        for c in range(3):
-            sam_overlay[:, :, c] = np.where(
-                mask > 0, sam_overlay[:, :, c] * 0.6 + color[c] * 0.4,
-                sam_overlay[:, :, c]
-            )
-    axes[1].imshow(sam_overlay.astype(np.uint8))
-    axes[1].set_title(f'SAM - {min(n_sam, 50)} mascaras')
+    if n_sam > 0:
+        sam_overlay = image_rgb.copy().astype(np.float32)
+        for i, mask in enumerate(sam_masks[:50]):
+            color = colors[i % len(colors)].astype(np.float32)
+            for c in range(3):
+                sam_overlay[:, :, c] = np.where(
+                    mask > 0, sam_overlay[:, :, c] * 0.6 + color[c] * 0.4,
+                    sam_overlay[:, :, c]
+                )
+        axes[1].imshow(sam_overlay.astype(np.uint8))
+        axes[1].set_title(f'SAM - {n_sam} mascaras')
+    else:
+        axes[1].imshow(image_rgb)
+        axes[1].set_title('SAM - sin mascaras tras filtro')
     axes[1].axis('off')
 
     fig.suptitle(f'Comparacion: DeepLabV3 vs SAM - {stem}', fontsize=14)
@@ -97,6 +101,16 @@ def compute_metrics_table(dl_masks, sam_masks, stem):
             'perimetro': perim,
             'centroide': cent
         })
+
+    if len(rows) == 0:
+        fig, ax = plt.subplots(figsize=(8, 3))
+        ax.text(0.5, 0.5, 'Sin datos de segmentacion para esta imagen',
+                ha='center', va='center', fontsize=12)
+        ax.axis('off')
+        fig.suptitle(f'Metricas de segmentacion - {stem}', fontsize=14)
+        plt.tight_layout()
+        save_and_display(fig, f'04_metrics_table_{stem}.png')
+        return
 
     fig, ax = plt.subplots(figsize=(14, max(4, len(rows) * 0.4)))
     ax.axis('off')
@@ -204,36 +218,44 @@ def main():
 
         print("  Ejecutando SAM...")
         img_pil = Image.fromarray(image_rgb)
+        h_small = img_pil.size[1]
         img_pil.thumbnail((640, 640), Image.LANCZOS)
         image_small = np.array(img_pil)
 
         xs = np.linspace(0, image_small.shape[1] - 1, 10, dtype=int)
         ys = np.linspace(0, image_small.shape[0] - 1, 10, dtype=int)
         grid_pts = [[float(x), float(y)] for y in ys for x in xs]
-        labels = [1] * len(grid_pts)
-        inputs = processor(image_small, input_points=[grid_pts],
-                           input_labels=[labels], return_tensors="pt").to(device)
-        with torch.no_grad():
-            outputs = sam_model(**inputs)
-        masks = processor.image_processor.post_process_masks(
-            outputs.pred_masks.cpu(), inputs["original_sizes"].cpu(),
-            inputs["reshaped_input_sizes"].cpu()
-        )[0].numpy()
-        scores = outputs.iou_scores.cpu().numpy()[0]
+        all_masks = []
+        all_scores = []
+        batch_size = 64
+        for start in range(0, len(grid_pts), batch_size):
+            batch_pts = grid_pts[start:start + batch_size]
+            labels = [1] * len(batch_pts)
+            inputs = processor(image_small, input_points=[batch_pts],
+                               input_labels=[labels], return_tensors="pt").to(device)
+            with torch.no_grad():
+                outputs = sam_model(**inputs)
+            masks = processor.image_processor.post_process_masks(
+                outputs.pred_masks.cpu(), inputs["original_sizes"].cpu(),
+                inputs["reshaped_input_sizes"].cpu()
+            )[0].numpy()
+            scores = outputs.iou_scores.cpu().numpy()[0]
+            all_masks.append(masks)
+            all_scores.append(scores)
+        masks = np.concatenate(all_masks, axis=0)
+        scores = np.concatenate(all_scores, axis=0)
         B, C, H, W = masks.shape
         masks = masks.reshape(B * C, H, W)
         scores = scores.flatten()
         import cv2
         h_orig, w_orig = image_rgb.shape[:2]
-        masks_resized = []
+        masks_resized_list = []
         for m in masks:
             m_resized = cv2.resize(m.astype(np.float32), (w_orig, h_orig),
                                    interpolation=cv2.INTER_NEAREST)
-            masks_resized.append((m_resized > 0).astype(np.uint8))
-        masks_bin = np.array(masks_resized)
-        valid_idx = scores > 0.85
-        masks_bin = masks_bin[valid_idx]
-        scores = scores[valid_idx]
+            masks_resized_list.append((m_resized > 0).astype(np.uint8))
+        masks_bin = np.array(masks_resized_list)
+        masks_bin, scores, _ = filter_pipeline(masks_bin, scores, h_orig, w_orig)
 
         stem = img_path.stem
         print(f"  DeepLabV3: {len(np.unique(dl_mask))-1} clases, "

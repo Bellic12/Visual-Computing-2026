@@ -8,7 +8,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from utils import (
     load_image_rgb, save_and_display, overlay_masks,
     PASCAL_CLASSES, PASCAL_COLORS, compute_mask_area,
-    compute_mask_perimeter, compute_iou, INPUT_DIR, get_device
+    compute_mask_perimeter, compute_iou, filter_pipeline,
+    INPUT_DIR, get_device
 )
 from PIL import Image
 import time
@@ -38,17 +39,27 @@ def segment_sam_batch(model, processor, image_rgb, device, grid_size=10):
     xs = np.linspace(0, w - 1, grid_size, dtype=int)
     ys = np.linspace(0, h - 1, grid_size, dtype=int)
     grid_pts = [[float(x), float(y)] for y in ys for x in xs]
-    labels = [1] * len(grid_pts)
 
-    inputs = processor(img_small, input_points=[grid_pts],
-                       input_labels=[labels], return_tensors="pt").to(device)
-    with torch.no_grad():
-        outputs = model(**inputs)
-    masks = processor.image_processor.post_process_masks(
-        outputs.pred_masks.cpu(), inputs["original_sizes"].cpu(),
-        inputs["reshaped_input_sizes"].cpu()
-    )[0].numpy()
-    scores = outputs.iou_scores.cpu().numpy()[0]
+    all_masks = []
+    all_scores = []
+    batch_size = 64
+    for start in range(0, len(grid_pts), batch_size):
+        batch_pts = grid_pts[start:start + batch_size]
+        labels = [1] * len(batch_pts)
+        inputs = processor(img_small, input_points=[batch_pts],
+                           input_labels=[labels], return_tensors="pt").to(device)
+        with torch.no_grad():
+            outputs = model(**inputs)
+        masks = processor.image_processor.post_process_masks(
+            outputs.pred_masks.cpu(), inputs["original_sizes"].cpu(),
+            inputs["reshaped_input_sizes"].cpu()
+        )[0].numpy()
+        scores = outputs.iou_scores.cpu().numpy()[0]
+        all_masks.append(masks)
+        all_scores.append(scores)
+
+    masks = np.concatenate(all_masks, axis=0)
+    scores = np.concatenate(all_scores, axis=0)
     B, C, H, W = masks.shape
     masks = masks.reshape(B * C, H, W)
     scores = scores.flatten()
@@ -202,9 +213,7 @@ def main():
                                    interpolation=cv2.INTER_NEAREST)
             masks_bin_list.append((m_resized > 0).astype(np.uint8))
         masks_bin = np.array(masks_bin_list)
-        valid = scores > 0.85
-        masks_bin = masks_bin[valid]
-        scores = scores[valid]
+        masks_bin, scores, _ = filter_pipeline(masks_bin, scores, h_orig, w_orig)
 
         dl_classes = len([c for c in np.unique(dl_mask)
                          if 0 < c < len(PASCAL_CLASSES)])
