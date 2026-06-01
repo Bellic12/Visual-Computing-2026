@@ -40,5 +40,4 @@ venv/
 *.exe
 *.log
 *.tmp
-*.svg
 *.zip
