@@ -1,0 +1,10 @@
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+ftfy
+regex
+tqdm
+Pillow>=9.0.0
+matplotlib>=3.5.0
+numpy>=1.21.0
+requests
