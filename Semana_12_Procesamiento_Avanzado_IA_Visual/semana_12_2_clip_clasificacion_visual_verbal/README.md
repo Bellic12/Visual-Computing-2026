@@ -192,10 +192,7 @@ El código completo está disponible en `python/clip_classifier.py` y `python/ba
 
 Durante el desarrollo del taller se utilizaron los siguientes prompts con herramientas de IA generativa para apoyar la implementación:
 
-- "Crea un script en Python que use CLIP de OpenAI para clasificar imágenes locales contra una lista de etiquetas de texto, guarde las visualizaciones en una carpeta media/ y genere un GIF animado con todos los resultados."
 - "Implementa una función que compare el rendimiento de prompts simples de una sola palabra contra descripciones largas en lenguaje natural para la misma imagen, mostrando las probabilidades side-by-side."
-- "Escribe la lógica de batch classification de CLIP: apila N imágenes en un solo tensor, tokeniza M etiquetas, ejecuta un único forward pass y devuelve la matriz (N, M) de probabilidades."
-- "Genera un demo de jerarquía de especificidad de etiquetas para una misma imagen, mostrando cómo varía la confianza de CLIP al pasar de etiquetas genéricas (reino) a etiquetas específicas (raza)."
 - "Crea una visualización tipo heatmap que muestre la matriz de similitud entre un conjunto de imágenes y un conjunto de etiquetas, con los valores de probabilidad anotados en cada celda."
 
 ---
