@@ -334,22 +334,72 @@ print(classification_report(all_labels, all_preds))
 El primer paso es indicar que el modelo está en modo evaluación, ya no está en proceso de entrenamiento. Por tanto, se desactiva el dropout. Además, como no necesitamos desarrollar backpropagation ni calculos de gradientes para optimizarlos con ADAM, iniciamos en modo `no_grad()`. 
 Se pasan al modelo los datos y se guardan las predicciones hechas con los datos reales para compararlos con `classification_report()`.
 
+### Fine tunning
+
+Con el objetivo de comparar el desempeño de un modelo entrenado desde cero con un modelo preentrenado, se utilizó la arquitectura ResNet18 disponible en la librería TorchVision.
+
+Inicialmente se cargó una versión preentrenada sobre el conjunto de datos ImageNet:
+
+```python
+model_ft = models.resnet18(pretrained=True)
+```
+
+Posteriormente se congelaron todos los parámetros de la red para conservar las características aprendidas previamente:
+
+```python
+for param in model_ft.parameters():
+    param.requires_grad = False
+```
+
+Finalmente se reemplazó la capa de clasificación original por una nueva capa totalmente conectada con 10 neuronas, correspondientes a las diez clases del conjunto de datos MNIST:
+
+```python
+num_ftrs = model_ft.fc.in_features
+model_ft.fc = nn.Linear(num_ftrs, 10)
+```
+
+Debido a que ResNet18 fue diseñada para trabajar con imágenes RGB de 224x224 píxeles, las imágenes del conjunto MNIST fueron redimensionadas y convertidas a tres canales antes de ser utilizadas durante el entrenamiento.
+
+Para el proceso de optimización se utilizó el algoritmo Adam y la función de pérdida CrossEntropyLoss. Durante el entrenamiento únicamente se actualizaron los parámetros de la capa de clasificación final, mientras que el resto de la red permaneció congelado.
+
+Este enfoque permite aprovechar características visuales aprendidas previamente por la red neuronal y adaptarlas al problema específico de reconocimiento de dígitos manuscritos.
+
+El proceso de entrenamiento es muy similar al entrenamiento del primer modelo.
+```python
+for epoch in range(epochs):
+
+    model_ft.train()
+
+    for images, labels in train_loader_resnet:
+
+        images = images.to(device)
+        labels = labels.to(device)
+        optimizer.zero_grad()
+        outputs = model_ft(images)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+```
+En el código presentado previemente, se suprimen las validaciones y los guardados de datos necesarios para las gráficas, se muestra el modelo general. 
+
 ## Resultados visuales e interpretación
 
-### Perdida - cross entropy validation
+### Modelo personalizado
+
+#### Perdida - cross entropy validation
 
 Como se explicó en la sección de implementación del modelo de red nueronal, la función de perdida indica que también está aprendiendo el modelo y se espera que a medida que pasen las épocas esta perdida disminuya, tanto en el proceso de entrenamiento como de validación. 
 
 ![Función de perdida en entrenamiento y validación en cada una de las épocas](./media/training_curves.png)
 
-### Accuracy 
+#### Accuracy 
 
 Por otro lado, la gráfica de accuracy muestra el porcentaje de aciertos en cada una de las épocas.
 Es decir, mide cuántas predicciones fueron correctas.
 
 ![Accuracy en cada época](./media/validation_accuracy.png)
 
-### Classification report
+#### Classification report
 
 ![Validaciones de los datos](./media/classification_report.png)
 
@@ -359,11 +409,28 @@ Los resultados muestran valores cercanos a 1.0 en precision, recall y F1-score p
 
 En general, los resultados obtenidos demuestran que la red neuronal logró aprender adecuadamente los patrones presentes en el conjunto de datos MNIST y alcanzar un alto nivel de precisión en la clasificación de dígitos manuscritos.
 
-### Heatmap - matriz de confusión
+#### Heatmap - matriz de confusión
 
 ![Matriz de confusión](./media/heatmap.png)
 
 La matriz de confusión muestra que la mayoría de las predicciones se concentran sobre la diagonal principal, indicando una alta tasa de clasificación correcta para todas las clases. Las principales confusiones se presentan entre dígitos visualmente similares, como 3 y 5, 7 y 1, o 9 y 4. En general, los resultados evidencian un buen desempeño del modelo, alcanzando una precisión cercana al 97% sobre el conjunto de prueba.
+
+### Resnet
+
+#### Restricciones
+
+Al momento del entrenamiento de la renet se presentaron ciertas restricciones que es importante tenerlas en cuenta.
+El conjunto de datos de entrenamiento es bastante grande y como se mencionó más arriba, para una resnet la cantidad de cálculos a realizar es mucho más elevado. Por tanto, se redujo a la mitad de forma aleatoria, esto tuvo como consecuencia directa afectaciones en el rendimiento del modelo.
+A continuación, se muestra una prueba que se desarrolló con el conjunto de datos completo, aún teniendo en cuenta que el entrenamiento del modelo nunca terminó
+![Datos completos training](./media/training_full_data_set.jpeg)
+
+#### Acurracy y perdida 
+A continuación, se puede identificar las funciones de perdida y de accuracy que se lograron identificar durante el proceso de entrenamiento.
+![Training curves resnet](./media/training_curves_resnet.png)
+![Accuracy resnet](./media/validation_accuracy_resnet.png)
+
+Al realizar la validación de la precisión de la red con los datos de validación (Que nunca fueron ingresados en el proceso de entrenamiento) se obtuvo que `Test Accuracy ResNet18: 0.8110`
+
 
 ## Referencias
 - https://www.datacamp.com/es/tutorial/the-cross-entropy-loss-function-in-machine-learning
@@ -373,3 +440,5 @@ La matriz de confusión muestra que la mayoría de las predicciones se concentra
 - https://velascoluis.medium.com/optimizadores-en-redes-neuronales-profundas-un-enfoque-pr%C3%A1ctico-819b39a3eb5
 - https://medium.com/@abhishek.jaiswaal1810/optimizers-in-neural-networks-4fb7adee4a63
 - https://www.geeksforgeeks.org/deep-learning/adam-optimizer/
+- https://es.wikipedia.org/wiki/Red_neuronal_residual
+- https://www.ultralytics.com/es/glossary/residual-networks-resnet#variantes-clave-de-la-arquitectura
