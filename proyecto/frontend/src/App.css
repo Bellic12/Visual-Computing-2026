@@ -6,6 +6,58 @@
   padding: 1.5rem;
 }
 
+/* ── Tab navigation ────────────────────────────────────────────────────── */
+
+.tab-nav {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(252, 250, 244, 0.72);
+  border: 1px solid var(--stroke-strong);
+  border-radius: 999px;
+  padding: 0.3rem;
+  width: fit-content;
+  backdrop-filter: blur(8px);
+  box-shadow: var(--panel-shadow);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 1.1rem;
+  font-family: var(--body-font);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 180ms, color 180ms;
+}
+
+.tab-btn:hover {
+  background: rgba(30, 35, 32, 0.07);
+}
+
+.tab-btn--activo {
+  background: var(--ink-main);
+  color: #f5f2ea;
+}
+
+.tab-btn--activo:hover {
+  background: var(--ink-main);
+}
+
+.tab-badge {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: #2d8f49;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+/* ── Dashboard ─────────────────────────────────────────────────────────── */
+
 .dashboard {
   backdrop-filter: blur(10px);
   border: 1px solid var(--stroke-strong);
@@ -108,7 +160,10 @@
   color: #205978;
 }
 
+/* ── 3D scene panel ────────────────────────────────────────────────────── */
+
 .scene-panel {
+  position: relative;
   border: 1px solid var(--stroke-strong);
   background: linear-gradient(145deg, #ede9dc, #f8f5ed);
   border-radius: 1.25rem;
@@ -123,6 +178,279 @@
   min-height: 62vh;
 }
 
+.scene-leyenda {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(252, 250, 244, 0.85);
+  border: 1px solid var(--stroke-soft);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  backdrop-filter: blur(6px);
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 0.32rem;
+}
+
+.leyenda-item::before {
+  content: '';
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 2px;
+}
+
+.leyenda-item--libre::before {
+  background: #2e7d32;
+}
+
+.leyenda-item--reservado::before {
+  background: #e67e22;
+}
+
+.leyenda-item--ocupado::before {
+  background: #c0392b;
+}
+
+/* ── Vista Usuario ─────────────────────────────────────────────────────── */
+
+.vista-usuario {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.vu-header {
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--stroke-strong);
+  border-radius: 1.25rem;
+  background: linear-gradient(130deg, var(--panel-bg), rgba(245, 244, 236, 0.7));
+  box-shadow: var(--panel-shadow);
+  padding: 1.2rem 1.4rem;
+}
+
+.vu-titulo {
+  margin: 0.15rem 0 0.3rem;
+  font-family: var(--title-font);
+  font-size: clamp(1.4rem, 2vw, 2.1rem);
+  color: var(--ink-main);
+}
+
+.vu-subtitulo {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+}
+
+/* -- Seleccion de entrada -- */
+
+.vu-seleccion {
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--stroke-strong);
+  border-radius: 1.25rem;
+  background: linear-gradient(130deg, var(--panel-bg), rgba(245, 244, 236, 0.7));
+  box-shadow: var(--panel-shadow);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.vu-label {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.vu-entradas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.vu-entrada-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1.5px solid var(--stroke-strong);
+  border-radius: 0.9rem;
+  padding: 0.85rem 0.5rem;
+  background: rgba(252, 251, 246, 0.82);
+  font-family: var(--body-font);
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 160ms, background 160ms, color 160ms;
+}
+
+.vu-entrada-btn:hover {
+  border-color: var(--ink-main);
+  background: rgba(30, 35, 32, 0.06);
+}
+
+.vu-entrada-btn--activa {
+  border-color: var(--ink-main);
+  background: var(--ink-main);
+  color: #f5f2ea;
+}
+
+.vu-flecha {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.vu-error {
+  margin: 0;
+  color: #9e2f2f;
+  font-size: 0.88rem;
+  background: rgba(192, 57, 43, 0.1);
+  border: 1px solid rgba(192, 57, 43, 0.25);
+  border-radius: 0.6rem;
+  padding: 0.55rem 0.85rem;
+}
+
+.vu-solicitar-btn {
+  align-self: flex-start;
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.6rem;
+  background: var(--ink-main);
+  color: #f5f2ea;
+  font-family: var(--body-font);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 160ms;
+}
+
+.vu-solicitar-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.vu-solicitar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* -- Vista activa (con reserva) -- */
+
+.vu-activo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.vu-contenido {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.vu-instrucciones {
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--stroke-strong);
+  border-radius: 1.25rem;
+  background: linear-gradient(130deg, var(--panel-bg), rgba(245, 244, 236, 0.7));
+  box-shadow: var(--panel-shadow);
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.vu-instrucciones h3 {
+  margin: 0;
+  font-family: var(--title-font);
+  font-size: 1.05rem;
+  color: var(--ink-main);
+}
+
+.vu-pasos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.vu-paso {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.87rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.vu-paso-num {
+  flex-shrink: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  background: var(--ink-main);
+  color: #f5f2ea;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vu-leyenda-mini {
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.vu-dot {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+}
+
+.vu-dot--naranja {
+  background: #f39c12;
+}
+
+.vu-dot--azul {
+  background: #1f6feb;
+}
+
+.vu-llegue-btn {
+  border: 1.5px solid #2e7d32;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  background: rgba(46, 125, 50, 0.1);
+  color: #1e5a22;
+  font-family: var(--body-font);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms, border-color 160ms;
+}
+
+.vu-llegue-btn:hover {
+  background: rgba(46, 125, 50, 0.2);
+}
+
+/* ── Animations ────────────────────────────────────────────────────────── */
+
 @keyframes reveal {
   from {
     opacity: 0;
@@ -133,6 +461,8 @@
     transform: translateY(0);
   }
 }
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
 
 @media (max-width: 1024px) {
   .metric-grid {
@@ -152,6 +482,14 @@
   .scene-panel canvas {
     min-height: 52vh;
   }
+
+  .vu-contenido {
+    grid-template-columns: 1fr;
+  }
+
+  .vu-entradas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {
@@ -161,5 +499,14 @@
 
   .metric-grid {
     grid-template-columns: 1fr;
+  }
+
+  .tab-nav {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .vu-entradas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

@@ -12,6 +12,7 @@ class Espacio:
     x: float
     z: float
     ocupado: bool
+    reservado: bool = False
 
 
 class DetectorParqueadero:
@@ -37,12 +38,12 @@ class DetectorParqueadero:
 
         return espacios
 
-    def obtener_espacios(self) -> list[Espacio]:
+    def obtener_espacios(self, reservados: set[str] | None = None) -> list[Espacio]:
         """Returns the current state of all parking spaces."""
 
-        return self._generar_espacios()
+        return self._generar_espacios(reservados or set())
 
-    def _generar_espacios(self) -> list[Espacio]:
+    def _generar_espacios(self, reservados: set[str]) -> list[Espacio]:
         """Generates parking space objects with current occupancy from stable 5-second snapshots."""
 
         resultado = []
@@ -50,7 +51,8 @@ class DetectorParqueadero:
         for indice, (espacio_id, px_x, px_y) in enumerate(self._espacios_px):
             x, z = px_a_mundo(px_x, px_y)
             ocupado = self._generador_ocupacion.es_ocupado(indice, len(self._espacios_px))
-            resultado.append(Espacio(id=espacio_id, x=x, z=z, ocupado=ocupado))
+            reservado = espacio_id in reservados
+            resultado.append(Espacio(id=espacio_id, x=x, z=z, ocupado=ocupado, reservado=reservado))
 
         return resultado
 

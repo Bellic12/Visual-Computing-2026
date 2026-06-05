@@ -1,4 +1,5 @@
-import { Canvas } from '@react-three/fiber'
+import { useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment, Line, OrbitControls, Text } from '@react-three/drei'
 
 function Piso() {
@@ -11,7 +12,9 @@ function Piso() {
 }
 
 function Plaza({ espacio }) {
-  const color = espacio.ocupado ? '#c0392b' : '#2e7d32'
+  let color = '#2e7d32'
+  if (espacio.ocupado) color = '#c0392b'
+  else if (espacio.reservado) color = '#e67e22'
 
   return (
     <group position={[espacio.x, 0, espacio.z]}>
@@ -59,9 +62,46 @@ function RutaOptima({ ruta }) {
   )
 }
 
-export function Parqueadero3D({ espacios, ruta, destino }) {
+function AnimacionRuta({ ruta }) {
+  const ref = useRef()
+  const progreso = useRef(0)
+
+  useFrame((_, delta) => {
+    if (!ruta || ruta.length < 2 || !ref.current) return
+    progreso.current = (progreso.current + delta * 0.22) % 1
+
+    const totalSegmentos = ruta.length - 1
+    const avance = progreso.current * totalSegmentos
+    const segmento = Math.floor(avance)
+    const t = avance - segmento
+
+    const desde = ruta[Math.min(segmento, ruta.length - 1)]
+    const hasta = ruta[Math.min(segmento + 1, ruta.length - 1)]
+
+    if (desde && hasta) {
+      ref.current.position.x = desde.x + (hasta.x - desde.x) * t
+      ref.current.position.z = desde.z + (hasta.z - desde.z) * t
+    }
+  })
+
+  if (!ruta || ruta.length < 2) return null
+
+  return (
+    <mesh ref={ref} position={[ruta[0].x, 0.4, ruta[0].z]} castShadow>
+      <sphereGeometry args={[0.28, 16, 16]} />
+      <meshStandardMaterial color="#f39c12" emissive="#f39c12" emissiveIntensity={0.9} />
+    </mesh>
+  )
+}
+
+export function Parqueadero3D({ espacios, ruta, destino, animarRuta = false }) {
   return (
     <section className="scene-panel" aria-label="Vista 3D del parqueadero">
+      <div className="scene-leyenda">
+        <span className="leyenda-item leyenda-item--libre">Libre</span>
+        <span className="leyenda-item leyenda-item--reservado">Reservado</span>
+        <span className="leyenda-item leyenda-item--ocupado">Ocupado</span>
+      </div>
       <Canvas shadows camera={{ position: [9, 13, 12], fov: 50 }}>
         <color attach="background" args={['#f6f2ea']} />
         <hemisphereLight intensity={0.5} color="#fff3d4" groundColor="#2b2b2b" />
@@ -77,6 +117,7 @@ export function Parqueadero3D({ espacios, ruta, destino }) {
           <Plaza key={espacio.id} espacio={espacio} />
         ))}
         <RutaOptima ruta={ruta} />
+        {animarRuta ? <AnimacionRuta ruta={ruta} /> : null}
         {destino ? (
           <mesh position={[destino.x, 0.12, destino.z]} castShadow>
             <sphereGeometry args={[0.22, 24, 24]} />

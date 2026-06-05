@@ -10,7 +10,7 @@ class Navegador:
     def calcular_ruta_optima(self, espacios: list, entrada: str = 'noroeste') -> dict:
         """Calculates the shortest route from entrance to the nearest free parking space."""
 
-        disponibles = [espacio for espacio in espacios if not espacio.ocupado]
+        disponibles = [espacio for espacio in espacios if not espacio.ocupado and not espacio.reservado]
 
         if not disponibles:
             return {
