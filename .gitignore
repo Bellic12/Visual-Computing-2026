@@ -2,6 +2,8 @@
 !README.md
 !**/README.md
 .directory
+.agents/
+skills-lock.json
 
 # Node.js / Three.js
 node_modules/
