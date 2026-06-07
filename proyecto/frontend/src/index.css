@@ -1,17 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
 
 :root {
-  --bg-top: #f0ece1;
-  --bg-bottom: #ded8c8;
-  --ink-main: #1e2320;
-  --ink-soft: #3b4943;
-  --ink-muted: #5f6b65;
-  --stroke-strong: rgba(23, 36, 30, 0.2);
-  --stroke-soft: rgba(37, 48, 44, 0.14);
-  --panel-bg: rgba(252, 250, 244, 0.78);
-  --panel-shadow: 0 14px 34px rgba(49, 58, 52, 0.17);
+  --bg-top:           #0d1823;
+  --bg-bottom:        #111e2e;
 
-  --body-font: 'Archivo', sans-serif;
+  --ink-main:         #dce6f2;
+  --ink-soft:         #8fa8bf;
+  --ink-muted:        #506070;
+
+  --stroke-strong:    rgba(255, 255, 255, 0.10);
+  --stroke-soft:      rgba(255, 255, 255, 0.07);
+
+  --panel-bg:         rgba(16, 28, 44, 0.88);
+  --panel-shadow:     0 14px 36px rgba(0, 0, 0, 0.48);
+
+  --accent:           #3a7fd5;
+  --accent-soft:      rgba(58, 127, 213, 0.15);
+
+  --body-font:  'Archivo', sans-serif;
   --title-font: 'Space Grotesk', sans-serif;
 
   font-family: var(--body-font);
@@ -32,9 +38,9 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 18% 10%, rgba(253, 237, 178, 0.65), transparent 40%),
-    radial-gradient(circle at 85% 80%, rgba(175, 209, 198, 0.6), transparent 35%),
-    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+    radial-gradient(circle at 18% 12%, rgba(40, 90, 170, 0.12), transparent 38%),
+    radial-gradient(circle at 82% 78%, rgba(10, 55, 110, 0.14), transparent 34%),
+    linear-gradient(160deg, var(--bg-top), var(--bg-bottom));
 }
 
 #root {
