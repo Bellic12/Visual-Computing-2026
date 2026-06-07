@@ -1,4 +1,4 @@
-# Taller 56 - Filtro de Kalman e Inferencia de Variables Ocultas
+# Taller 13.1 - Filtro de Kalman e Inferencia de Variables Ocultas
 
 ## Integrantes del grupo
 
