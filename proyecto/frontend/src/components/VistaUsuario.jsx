@@ -2,87 +2,89 @@ import { useState } from 'react'
 import { Parqueadero3D } from './Parqueadero3D'
 
 const ENTRADAS = [
-  { id: 'noroeste', label: 'Noroeste', flecha: '↖' },
-  { id: 'noreste', label: 'Noreste', flecha: '↗' },
-  { id: 'suroeste', label: 'Suroeste', flecha: '↙' },
-  { id: 'sureste', label: 'Sureste', flecha: '↘' },
+  { id: 'oeste', label: 'Entrada Izquierda', flecha: '←', descripcion: 'Lateral oeste' },
+  { id: 'este',  label: 'Entrada Derecha',  flecha: '→', descripcion: 'Lateral este'  },
 ]
 
 function instruccionesDesdeRuta(ruta, destino, entrada) {
-  if (!ruta || ruta.length < 2) return []
+  if (!ruta || ruta.length < 2 || !destino) return []
 
   const nombreEntrada = ENTRADAS.find((e) => e.id === entrada)?.label ?? entrada
+  const instrucciones = [`Ingresa al parqueadero por la ${nombreEntrada}`]
 
-  const instrucciones = [`Ingresa al parqueadero por la entrada ${nombreEntrada}`]
+  const dx = ruta.length >= 2 ? ruta[1].x - ruta[0].x : 0
+  instrucciones.push(
+    dx > 0
+      ? 'Avanza hacia la derecha por el corredor central'
+      : 'Avanza hacia la izquierda por el corredor central',
+  )
 
-  for (let i = 1; i < ruta.length; i++) {
-    const dx = ruta[i].x - ruta[i - 1].x
-    const dz = ruta[i].z - ruta[i - 1].z
-    const esUltimo = i === ruta.length - 1
-
-    if (esUltimo) {
-      instrucciones.push(`Estaciona en el espacio ${destino?.id ?? ''}`)
-    } else if (Math.abs(dx) > Math.abs(dz)) {
-      instrucciones.push(dx > 0 ? 'Avanza hacia la derecha al corredor lateral' : 'Avanza hacia la izquierda al corredor lateral')
-    } else {
-      instrucciones.push(`Avanza por el corredor hasta la fila ${destino?.id?.split('-')[1] ?? ''}`)
-    }
-  }
+  const fila = destino.id?.split('-')[1] ?? ''
+  const haciaElNorte = (ruta[ruta.length - 1]?.z ?? 0) < 0
+  instrucciones.push(`Gira hacia el ${haciaElNorte ? 'norte' : 'sur'} (Fila ${fila})`)
+  instrucciones.push(`Estaciona en el espacio ${destino.id}`)
 
   return instrucciones
 }
 
 export function VistaUsuario({ espacios, reserva, cargando, errorReserva, solicitar, liberar }) {
-  const [entrada, setEntrada] = useState('noroeste')
+  const [entrada, setEntrada] = useState('oeste')
 
   const pasos = instruccionesDesdeRuta(reserva?.ruta, reserva?.destino, reserva?.entrada ?? entrada)
 
   return (
     <div className="vista-usuario">
-      <header className="vu-header">
-        <div>
-          <p className="eyebrow">Sistema de guia</p>
-          <h2 className="vu-titulo">
-            {reserva ? `Espacio asignado: ${reserva.espacio_id}` : 'Bienvenido al Parqueadero'}
-          </h2>
-          {reserva ? (
-            <p className="vu-subtitulo">
-              Distancia desde la entrada: <strong>{reserva.distancia} m</strong>
-            </p>
-          ) : (
-            <p className="vu-subtitulo">
-              Selecciona tu entrada y solicita un espacio disponible.
-            </p>
-          )}
-        </div>
-      </header>
-
       {!reserva ? (
-        <div className="vu-seleccion">
-          <p className="vu-label">Selecciona tu entrada:</p>
-          <div className="vu-entradas">
-            {ENTRADAS.map((e) => (
-              <button
-                key={e.id}
-                className={`vu-entrada-btn${entrada === e.id ? ' vu-entrada-btn--activa' : ''}`}
-                onClick={() => setEntrada(e.id)}
-              >
-                <span className="vu-flecha">{e.flecha}</span>
-                <span>{e.label}</span>
-              </button>
-            ))}
+        <div className="vu-splash">
+          <div className="vu-card">
+            <p className="eyebrow" style={{ textAlign: 'center', marginBottom: '0.4rem' }}>
+              Sistema de guía de parqueadero
+            </p>
+            <h2 className="vu-titulo">Bienvenido</h2>
+            <p className="vu-hint">Selecciona la entrada por donde llegaste:</p>
+
+            <div className="vu-entradas">
+              {ENTRADAS.map((e) => (
+                <button
+                  key={e.id}
+                  className={`vu-entrada-btn${entrada === e.id ? ' vu-entrada-btn--activa' : ''}`}
+                  onClick={() => setEntrada(e.id)}
+                >
+                  <span className="vu-flecha">{e.flecha}</span>
+                  <div>
+                    <div className="vu-entrada-label">{e.label}</div>
+                    <div className="vu-entrada-desc">{e.descripcion}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {errorReserva && <p className="vu-error">{errorReserva}</p>}
+
+            <button
+              className="vu-solicitar-btn"
+              onClick={() => solicitar(entrada)}
+              disabled={cargando}
+            >
+              {cargando ? 'Buscando espacio…' : 'Obtener espacio disponible'}
+            </button>
           </div>
-          {errorReserva && <p className="vu-error">{errorReserva}</p>}
-          <button
-            className="vu-solicitar-btn"
-            onClick={() => solicitar(entrada)}
-            disabled={cargando}
-          >
-            {cargando ? 'Buscando espacio...' : 'Solicitar espacio'}
-          </button>
         </div>
       ) : (
         <div className="vu-activo">
+          <header className="vu-header-activo">
+            <div>
+              <p className="eyebrow">Espacio asignado</p>
+              <h2 className="vu-titulo-activo">{reserva.espacio_id}</h2>
+              <p className="vu-dist">
+                Distancia desde tu entrada: <strong>{reserva.distancia} m</strong>
+              </p>
+            </div>
+            <button className="vu-llegue-btn" onClick={liberar}>
+              ✓ Ya llegué — liberar
+            </button>
+          </header>
+
           <div className="vu-contenido">
             <Parqueadero3D
               espacios={espacios}
@@ -91,8 +93,8 @@ export function VistaUsuario({ espacios, reserva, cargando, errorReserva, solici
               animarRuta
             />
 
-            <aside className="vu-instrucciones">
-              <h3>Instrucciones</h3>
+            <nav className="vu-instrucciones" aria-label="Pasos de navegación">
+              <h3 className="vu-instrucciones-titulo">Tu ruta</h3>
               <ol className="vu-pasos">
                 {pasos.map((paso, i) => (
                   <li key={i} className="vu-paso">
@@ -101,14 +103,12 @@ export function VistaUsuario({ espacios, reserva, cargando, errorReserva, solici
                   </li>
                 ))}
               </ol>
+
               <div className="vu-leyenda-mini">
-                <span className="vu-dot vu-dot--naranja" /> Punto de guia animado
-                <span className="vu-dot vu-dot--azul" style={{ marginLeft: '0.8rem' }} /> Tu espacio
+                <span><span className="vu-dot vu-dot--naranja" /> Guía</span>
+                <span><span className="vu-dot vu-dot--azul" /> Destino</span>
               </div>
-              <button className="vu-llegue-btn" onClick={liberar}>
-                He llegado — Liberar espacio
-              </button>
-            </aside>
+            </nav>
           </div>
         </div>
       )}

@@ -17,10 +17,8 @@ detector = DetectorParqueadero()
 gestor_reservas = GestorReservas()
 
 entradas = {
-    'noroeste': (-15.0, -11.5),
-    'noreste': (15.0, -11.5),
-    'suroeste': (-15.0, 11.5),
-    'sureste': (15.0, 11.5),
+    'oeste': (-38.0, 0.0),
+    'este': (38.0, 0.0),
 }
 
 navegador = Navegador(entradas=entradas)
@@ -39,7 +37,7 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-def construir_estado(entrada: str = "noroeste") -> dict:
+def construir_estado(entrada: str = "oeste") -> dict:
     reservados = gestor_reservas.obtener_reservados()
     espacios = detector.obtener_espacios(reservados)
     ruta = navegador.calcular_ruta_optima(espacios, entrada=entrada)
@@ -81,12 +79,12 @@ def get_espacios() -> list[dict]:
 
 
 @app.get("/estado")
-def get_estado(entrada: str = "noroeste") -> dict:
+def get_estado(entrada: str = "oeste") -> dict:
     return construir_estado(entrada)
 
 
 @app.get("/suscripcion/estado")
-async def suscripcion_estado(entrada: str = "noroeste") -> StreamingResponse:
+async def suscripcion_estado(entrada: str = "oeste") -> StreamingResponse:
     async def generar_eventos():
         ultimo_snapshot = None
         ultima_version_reservas = None
@@ -107,7 +105,7 @@ async def suscripcion_estado(entrada: str = "noroeste") -> StreamingResponse:
 
 
 @app.post("/reservar")
-def post_reservar(entrada: str = "noroeste") -> dict:
+def post_reservar(entrada: str = "oeste") -> dict:
     """Assigns and reserves the nearest free space from the given entrance."""
     reservados = gestor_reservas.obtener_reservados()
     espacios = detector.obtener_espacios(reservados)
@@ -140,7 +138,7 @@ def delete_reservar(espacio_id: str) -> dict:
 
 
 @app.get("/ruta-optima")
-def get_ruta_optima(entrada: str = "noroeste") -> dict:
+def get_ruta_optima(entrada: str = "oeste") -> dict:
     reservados = gestor_reservas.obtener_reservados()
     espacios = detector.obtener_espacios(reservados)
     return navegador.calcular_ruta_optima(espacios, entrada=entrada)

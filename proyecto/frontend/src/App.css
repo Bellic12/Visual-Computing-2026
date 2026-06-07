@@ -1,3 +1,210 @@
+/* ── Entrada screen (fullscreen, no navbar) ─────────────────────────────── */
+
+.entrada-idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  min-height: 100dvh;
+  padding: 3rem 2rem;
+  width: 100vw;
+}
+
+.entrada-idle__top {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.entrada-idle__flecha {
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.entrada-idle__title {
+  font-family: var(--title-font);
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  color: var(--ink-main);
+  margin: 0;
+}
+
+.entrada-idle__lado {
+  font-size: 1rem;
+  color: var(--ink-muted);
+  margin: 0.3rem 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.entrada-idle__stats {
+  display: flex;
+  align-items: center;
+  background: var(--panel-bg);
+  border: 1px solid var(--stroke-strong);
+  border-radius: 1.2rem;
+  padding: 1.4rem 0;
+}
+
+.entrada-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 2.5rem;
+}
+
+.entrada-stat--sep {
+  width: 1px;
+  height: 2.5rem;
+  background: var(--stroke-strong);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.entrada-stat__num {
+  font-family: var(--title-font);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--ink-main);
+  line-height: 1;
+}
+
+.entrada-stat__lbl {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.entrada-error {
+  color: #e05252;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.entrada-btn-solicitar {
+  padding: 1.2rem 4rem;
+  background: var(--accent);
+  border: none;
+  border-radius: 1rem;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--title-font);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  transition: background 150ms, transform 120ms, box-shadow 150ms;
+  box-shadow: 0 0 0 0 rgba(58, 127, 213, 0);
+}
+
+.entrada-btn-solicitar:hover:not(:disabled) {
+  background: #2d6ec4;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(58, 127, 213, 0.38);
+}
+
+.entrada-btn-solicitar:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* — Active route view — */
+.entrada-activa {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  width: 100vw;
+}
+
+.entrada-activa__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.8rem;
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--stroke-strong);
+  flex-shrink: 0;
+}
+
+.entrada-activa__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.entrada-activa__espacio {
+  font-family: var(--title-font);
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  color: var(--ink-main);
+  margin: 0;
+}
+
+.entrada-activa__dist {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.entrada-activa__acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.entrada-btn-entendido {
+  padding: 0.6rem 1.6rem;
+  background: var(--accent);
+  border: none;
+  border-radius: 0.6rem;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--title-font);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 150ms, transform 100ms;
+}
+
+.entrada-btn-entendido:hover {
+  background: #2d6ec4;
+  transform: translateY(-1px);
+}
+
+.entrada-activa__reset {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+.entrada-activa__mapa {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.entrada-activa__mapa .scene-panel {
+  flex: 1;
+  min-height: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--stroke-strong);
+  display: flex;
+  flex-direction: column;
+}
+
+.entrada-activa__mapa .scene-panel canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* ── Admin shell ────────────────────────────────────────────────────────── */
+
 .app-shell {
   display: grid;
   grid-template-columns: 1fr;
@@ -210,4 +417,352 @@
 @media (max-width: 640px) {
   .app-shell { padding: 0.85rem; }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ── Navigation bar ─────────────────────────────────────────────────────── */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1.5rem;
+  background: rgba(10, 18, 30, 0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--stroke-strong);
+}
+
+.navbar-brand {
+  font-family: var(--title-font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink-main);
+  letter-spacing: 0.04em;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.navbar-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: var(--body-font);
+  font-size: 0.88rem;
+  padding: 0.35rem 0.85rem;
+  transition: background 150ms, color 150ms, border-color 150ms;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.navbar-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ink-main);
+}
+
+.navbar-btn--active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Vista Usuario ──────────────────────────────────────────────────────── */
+
+.vista-usuario {
+  min-height: calc(100dvh - 3rem);
+}
+
+/* — Splash / entry selection — */
+.vu-splash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100dvh - 6rem);
+  padding: 2rem 1rem;
+}
+
+.vu-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--stroke-strong);
+  border-radius: 1.5rem;
+  box-shadow: var(--panel-shadow);
+  padding: 2.5rem 2.8rem;
+  width: min(500px, 100%);
+  text-align: center;
+}
+
+.vu-titulo {
+  font-family: var(--title-font);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  color: var(--ink-main);
+  margin: 0.2rem 0 0.5rem;
+}
+
+.vu-hint {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem;
+}
+
+.vu-entradas {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.vu-entrada-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.4rem;
+  border: 1.5px solid var(--stroke-strong);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: var(--body-font);
+  font-size: 0.9rem;
+  text-align: left;
+  transition: background 150ms, border-color 150ms, color 150ms;
+  flex: 1;
+}
+
+.vu-entrada-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--accent);
+  color: var(--ink-main);
+}
+
+.vu-entrada-btn--activa {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--ink-main);
+}
+
+.vu-flecha {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.vu-entrada-label {
+  font-weight: 500;
+  color: inherit;
+}
+
+.vu-entrada-desc {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  margin-top: 0.1rem;
+}
+
+.vu-error {
+  color: #e05252;
+  font-size: 0.88rem;
+  margin: 0 0 1rem;
+}
+
+.vu-solicitar-btn {
+  width: 100%;
+  padding: 0.9rem 1.4rem;
+  background: var(--accent);
+  border: none;
+  border-radius: 0.75rem;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--body-font);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 150ms, transform 100ms;
+}
+
+.vu-solicitar-btn:hover:not(:disabled) {
+  background: #2d6ec4;
+  transform: translateY(-1px);
+}
+
+.vu-solicitar-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* — Active navigation view — */
+.vu-activo {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 3rem);
+  /* Override root max-width so the map stretches edge-to-edge */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.vu-header-activo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--stroke-strong);
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.vu-titulo-activo {
+  font-family: var(--title-font);
+  font-size: clamp(1.1rem, 2vw, 1.7rem);
+  color: var(--ink-main);
+  margin: 0;
+}
+
+.vu-dist {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.vu-llegue-btn {
+  background: #2e7d32;
+  border: none;
+  border-radius: 0.65rem;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--body-font);
+  font-size: 0.93rem;
+  font-weight: 600;
+  padding: 0.65rem 1.3rem;
+  white-space: nowrap;
+  transition: background 150ms;
+}
+
+.vu-llegue-btn:hover { background: #236b27; }
+
+/* 3D map takes the full width; instructions live below as a horizontal strip */
+.vu-contenido {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.vu-contenido .scene-panel {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--stroke-strong);
+  min-height: 0;
+  flex: 1;
+  /* Force canvas to fill the flex item */
+  display: flex;
+  flex-direction: column;
+}
+
+.vu-contenido .scene-panel > div,
+.vu-contenido .scene-panel > canvas {
+  flex: 1 !important;
+  min-height: 0 !important;
+}
+
+.vu-contenido .scene-panel canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* — Navigation instructions — horizontal bar at bottom — */
+.vu-instrucciones {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  background: var(--panel-bg);
+  overflow-x: auto;
+}
+
+.vu-instrucciones-titulo {
+  display: none; /* hidden in horizontal layout */
+}
+
+/* Horizontal steps list inside the bottom bar */
+.vu-pasos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex: 1;
+}
+
+.vu-paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-align: center;
+  padding: 0.8rem 1.2rem;
+  border-right: 1px solid var(--stroke-soft);
+  flex: 1;
+  min-width: 160px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  line-height: 1.35;
+}
+
+.vu-paso-num {
+  flex-shrink: 0;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* Leyenda inside the bottom bar, after the steps */
+.vu-leyenda-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+  color: var(--ink-muted);
+  padding: 0.8rem 1.2rem;
+  flex-shrink: 0;
+  border-left: 1px solid var(--stroke-soft);
+  white-space: nowrap;
+}
+
+.vu-dot {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.vu-dot--naranja { background: #f97316; }
+.vu-dot--azul    { background: #2563eb; }
+
+@media (max-width: 820px) {
+  .vu-pasos { flex-direction: column; }
+  .vu-paso  { border-right: none; border-bottom: 1px solid var(--stroke-soft); }
+  .vu-entradas { flex-direction: column; }
 }
