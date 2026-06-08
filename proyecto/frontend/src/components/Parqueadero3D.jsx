@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { Environment, MapControls, Sky } from '@react-three/drei'
+import { useMemo, useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Environment, MapControls, Sky, Line } from '@react-three/drei'
 import * as THREE from 'three'
 
 // ---------------------------------------------------------------------------
@@ -441,9 +441,108 @@ function Plaza({ espacio }) {
 }
 
 // ---------------------------------------------------------------------------
+// Route animation components
+// ---------------------------------------------------------------------------
+// Build visible Box-based route segments — more reliable than Line at all camera angles.
+function SegmentoRuta({ p0, p1 }) {
+  const cx = (p0[0] + p1[0]) / 2
+  const cz = (p0[2] + p1[2]) / 2
+  const dx = p1[0] - p0[0]
+  const dz = p1[2] - p0[2]
+  const len = Math.sqrt(dx * dx + dz * dz)
+  const angle = -Math.atan2(dz, dx)
+  if (len < 0.01) return null
+  return (
+    <mesh position={[cx, 0.9, cz]} rotation-y={angle}>
+      <boxGeometry args={[len, 0.5, 0.75]} />
+      <meshStandardMaterial color="#f97316" emissive="#f97316" emissiveIntensity={1.8} />
+    </mesh>
+  )
+}
+
+function RutaAnimada({ ruta }) {
+  const dotRef = useRef()
+  const elapsed = useRef(0)
+
+  const puntos = useMemo(() => ruta.map((p) => [p.x, 1.0, p.z]), [ruta])
+
+  const segLengths = useMemo(() => puntos.slice(1).map((p, i) => {
+    const dx = p[0] - puntos[i][0]
+    const dz = p[2] - puntos[i][2]
+    return Math.sqrt(dx * dx + dz * dz)
+  }), [puntos])
+
+  const totalLen = useMemo(() => segLengths.reduce((a, b) => a + b, 0) || 1, [segLengths])
+
+  useFrame((_, delta) => {
+    elapsed.current = (elapsed.current + delta * 0.35) % 1
+    let dist = elapsed.current * totalLen
+    let idx = 0
+    while (idx < segLengths.length - 1 && dist > segLengths[idx]) {
+      dist -= segLengths[idx]
+      idx++
+    }
+    const seg = segLengths[idx] || 1
+    const alpha = Math.min(dist / seg, 1)
+    const p0 = puntos[idx]
+    const p1 = puntos[idx + 1] ?? p0
+    if (dotRef.current) {
+      dotRef.current.position.set(
+        p0[0] + (p1[0] - p0[0]) * alpha,
+        1.5,
+        p0[2] + (p1[2] - p0[2]) * alpha,
+      )
+    }
+  })
+
+  if (puntos.length < 2) return null
+
+  return (
+    <>
+      {puntos.slice(1).map((p, i) => (
+        <SegmentoRuta key={i} p0={puntos[i]} p1={p} />
+      ))}
+      <mesh ref={dotRef} position={[puntos[0][0], 1.5, puntos[0][2]]}>
+        <sphereGeometry args={[0.9, 16, 16]} />
+        <meshStandardMaterial color="#f97316" emissive="#f97316" emissiveIntensity={2.5} />
+      </mesh>
+    </>
+  )
+}
+
+function DestinoMarcador({ x, z }) {
+  const ringRef = useRef()
+  const pillarRef = useRef()
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime
+    if (ringRef.current) {
+      const s = 1 + 0.2 * Math.sin(t * 3.0)
+      ringRef.current.scale.setScalar(s)
+    }
+    if (pillarRef.current) {
+      pillarRef.current.material.emissiveIntensity = 0.7 + 0.3 * Math.sin(t * 3.0)
+    }
+  })
+  return (
+    <group position={[x, 0, z]}>
+      {/* Ground ring */}
+      <mesh ref={ringRef} rotation-x={-Math.PI / 2} position={[0, 0.05, 0]}>
+        <ringGeometry args={[0.9, 1.5, 32]} />
+        <meshStandardMaterial color="#2563eb" emissive="#2563eb" emissiveIntensity={1.2} transparent opacity={0.95} />
+      </mesh>
+      {/* Vertical glowing pillar above the space */}
+      <mesh ref={pillarRef} position={[0, 3.5, 0]}>
+        <cylinderGeometry args={[0.28, 0.28, 6.0, 8]} />
+        <meshStandardMaterial color="#2563eb" emissive="#2563eb" emissiveIntensity={1.5} transparent opacity={0.7} />
+      </mesh>
+    </group>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
-export function Parqueadero3D({ espacios: espaciosBackend = [] }) {
+export function Parqueadero3D({ espacios: espaciosBackend = [], ruta = [], destino = null, animarRuta = false }) {
   const espacios = useMemo(() => {
     const mapa = new Map(espaciosBackend.map((e) => [e.id, e]))
     return ESPACIOS_ESTATICOS.map((e) => ({
@@ -461,7 +560,11 @@ export function Parqueadero3D({ espacios: espaciosBackend = [] }) {
         <span className="leyenda-item leyenda-item--ocupado">Ocupado</span>
       </div>
 
-      <Canvas shadows camera={{ position: [0, 30, 22], fov: 52 }} gl={{ antialias: true }}>
+      <Canvas
+        shadows
+        camera={{ position: [0, 30, 22], fov: animarRuta ? 58 : 52 }}
+        gl={{ antialias: true }}
+      >
         <color attach="background" args={['#b4cce0']} />
 
         <Sky sunPosition={[80, 22, 60]} turbidity={4} rayleigh={0.32} mieCoefficient={0.004} />
@@ -493,6 +596,9 @@ export function Parqueadero3D({ espacios: espaciosBackend = [] }) {
         {espacios.map((e) => (
           <Plaza key={e.id} espacio={e} />
         ))}
+
+        {animarRuta && ruta.length >= 2 && <RutaAnimada ruta={ruta} />}
+        {animarRuta && destino && <DestinoMarcador x={destino.x} z={destino.z} />}
 
         <MapControls
           makeDefault

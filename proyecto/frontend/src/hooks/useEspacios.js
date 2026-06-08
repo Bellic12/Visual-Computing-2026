@@ -6,7 +6,7 @@ export function useEspacios() {
   const [espacios, setEspacios] = useState([])
   const [ruta, setRuta] = useState([])
   const [destino, setDestino] = useState(null)
-  const [entrada, setEntrada] = useState('noroeste')
+  const [entrada, setEntrada] = useState('oeste')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [updatedAt, setUpdatedAt] = useState(null)
