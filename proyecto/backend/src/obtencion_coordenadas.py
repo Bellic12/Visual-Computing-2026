@@ -30,12 +30,16 @@ THRESHOLD = 0.5
 
 # Cargar modelo el preentrenado Resnet50 
 def load_model():
-    model = fasterrcnn_resnet50_fpn(pretrained=False)
+    # model = fasterrcnn_resnet50_fpn(pretrained=False)
+    model = fasterrcnn_resnet50_fpn(weights = None, weights_backbone = None)
     in_features = model.roi_heads.box_predictor.cls_score.in_features
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, 3)
     model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
     model.to(DEVICE).eval()
     return model
+
+print("Cargando modelo...")
+model = load_model()
 
 # Detección de vehículos 
 @torch.no_grad()
@@ -98,8 +102,6 @@ def convert_to_real_coords(boxes, labels, scores, offset, dest_size):
 # -------------------------------------------
 def main():
     # Cargar modelo
-    print("Cargando modelo...")
-    model = load_model()
 
     # Cargar imagen
     img = cv2.imread(IMAGE_PATH)
