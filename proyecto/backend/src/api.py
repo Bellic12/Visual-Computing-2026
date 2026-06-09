@@ -39,12 +39,19 @@ def health() -> dict[str, str]:
 
 def construir_estado(entrada: str = "oeste") -> dict:
     reservados = gestor_reservas.obtener_reservados()
-    espacios = detector.obtener_espacios(reservados)
-    ruta = navegador.calcular_ruta_optima(espacios, entrada=entrada)
+    estado_detector = detector.obtener_estado()
+    espacios = detector.obtener_espacios(
+        reservados
+    )
+
+    ruta = navegador.calcular_ruta_optima(
+        espacios,
+        entrada=entrada
+    )
 
     return {
         'entrada': ruta['entrada'],
-        'snapshot': detector.obtener_clave_snapshot(),
+        'snapshot': estado_detector['snapshot'],
         'version_reservas': gestor_reservas.version,
         'espacios': [
             {

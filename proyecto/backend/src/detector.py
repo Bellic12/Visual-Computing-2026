@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import time
 
 # from ocupacion import GeneradorOcupacion
 
@@ -40,9 +41,43 @@ class DetectorParqueadero:
     def __init__(self) -> None:
         self._espacios_base = self._crear_malla()
         self._detector_real = DetectorReal()
+        self._ultimo_estado = None
+        self._ultimo_timestamp = 0
+        self._cache_segundos = 5
         self._asignador = AsignadorEspacios(
             self._espacios_base
         )
+    
+    def _actualizar_estado(self):
+        vehiculos = self._detector_real.obtener_vehiculos()
+
+        ocupados = self._asignador.obtener_ocupados(
+            vehiculos
+        )
+
+        snapshot = hash(
+            tuple(sorted(ocupados))
+        )
+
+        self._ultimo_estado = {
+            "vehiculos": vehiculos,
+            "ocupados": ocupados,
+            "snapshot": snapshot
+        }
+
+        self._ultimo_timestamp = time.time()
+    
+    def _obtener_estado_cacheado(self):
+        ahora = time.time()
+
+        if (
+            self._ultimo_estado is None
+            or
+            ahora - self._ultimo_timestamp > self._cache_segundos
+        ):
+            self._actualizar_estado()
+
+        return self._ultimo_estado
 
     def _crear_malla(self) -> list[tuple[str, float, float]]:
         espacios: list[tuple[str, float, float]] = []
@@ -67,18 +102,34 @@ class DetectorParqueadero:
     #         resultado.append(Espacio(id=espacio_id, x=x, z=z, ocupado=ocupado, reservado=reservado))
     #     return resultado
 
-    def _generar_espacios(self, reservados):
-        vehiculos = self._detector_real.obtener_vehiculos()
-        ocupados = self._asignador.obtener_ocupados(
-            vehiculos
-        )
-        print("\nVEHICULOS:")
-        for v in vehiculos:
-            print(v)
+    # def _generar_espacios(self, reservados):
+    #     vehiculos = self._detector_real.obtener_vehiculos()
+    #     ocupados = self._asignador.obtener_ocupados(
+    #         vehiculos
+    #     )
+    #     print("\nVEHICULOS:")
+    #     for v in vehiculos:
+    #         print(v)
 
-        print("\nESPACIOS OCUPADOS:")
-        for e in sorted(ocupados):
-            print(e)
+    #     print("\nESPACIOS OCUPADOS:")
+    #     for e in sorted(ocupados):
+    #         print(e)
+    #     resultado = []
+    #     for espacio_id, x, z in self._espacios_base:
+    #         resultado.append(
+    #             Espacio(
+    #                 id=espacio_id,
+    #                 x=x,
+    #                 z=z,
+    #                 ocupado=espacio_id in ocupados,
+    #                 reservado=espacio_id in reservados
+    #             )
+    #         )
+    #     return resultado
+
+    def _generar_espacios(self, reservados):
+        estado = self._obtener_estado_cacheado()
+        ocupados = estado["ocupados"]
         resultado = []
         for espacio_id, x, z in self._espacios_base:
             resultado.append(
@@ -90,15 +141,25 @@ class DetectorParqueadero:
                     reservado=espacio_id in reservados
                 )
             )
+
         return resultado
     
     # def obtener_clave_snapshot(self) -> int:
     #     return self._generador_ocupacion.obtener_clave_snapshot(len(self._espacios_base))
 
+    # def obtener_clave_snapshot(self):
+    #     vehiculos = self._detector_real.obtener_vehiculos()
+
+    #     return hash(
+    #         tuple(
+    #             sorted(vehiculos)
+    #         )
+    #     )
+    
     def obtener_clave_snapshot(self):
-        vehiculos = self._detector_real.obtener_vehiculos()
-        return hash(
-            tuple(
-                sorted(vehiculos)
-            )
-        )
+        estado = self._obtener_estado_cacheado()
+        return estado["snapshot"]
+        
+    def obtener_estado(self):
+        return self._obtener_estado_cacheado()
+   
