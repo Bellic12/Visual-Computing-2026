@@ -10,6 +10,11 @@ class GeneradorOcupacion:
     ~40 % of the 62 spaces are free each window, giving enough room for
     multi-car reservation testing while still looking realistically busy.
     """
+    """
+    Temporal modification to leave stable the temporal ocupation for front end development.
+
+    To rervert, delete uncommented _renovar_espacio and let the original commented function.
+    """
 
     def __init__(self, seed: int = 23, tasa_ocupacion: float = 0.60) -> None:
         self._seed = seed
@@ -17,14 +22,27 @@ class GeneradorOcupacion:
         self._snapshot_bucket: int | None = None
         self._snapshot_ocupados: set[int] = set()
 
+    # def _renovar_snapshot(self, total_espacios: int) -> None:
+    #     bucket = int(time.time() // 5)
+    #     if bucket == self._snapshot_bucket:
+    #         return
+    #     rng = Random(self._seed + bucket)
+    #     n_ocupados = round(total_espacios * self._tasa_ocupacion)
+    #     self._snapshot_ocupados = set(rng.sample(range(total_espacios), n_ocupados))
+    #     self._snapshot_bucket = bucket
+
     def _renovar_snapshot(self, total_espacios: int) -> None:
-        bucket = int(time.time() // 5)
-        if bucket == self._snapshot_bucket:
+        if self._snapshot_bucket is not None:
             return
-        rng = Random(self._seed + bucket)
-        n_ocupados = round(total_espacios * self._tasa_ocupacion)
-        self._snapshot_ocupados = set(rng.sample(range(total_espacios), n_ocupados))
-        self._snapshot_bucket = bucket
+        self._snapshot_ocupados = {
+            0, 1, 2, 3,
+            10, 11, 12,
+            20, 21, 22,
+            30, 31,
+            40, 41,
+            50
+        }
+        self._snapshot_bucket = 1
 
     def obtener_clave_snapshot(self, total_espacios: int) -> int:
         self._renovar_snapshot(total_espacios)

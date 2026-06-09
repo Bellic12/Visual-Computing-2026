@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from ocupacion import GeneradorOcupacion
+# from ocupacion import GeneradorOcupacion
+
+from detector_real import DetectorReal
+from asignador_espacios import AsignadorEspacios
 
 # Mirror the exact geometry constants from Parqueadero3D.jsx so backend
 # coordinates and frontend 3D positions are always in sync.
@@ -30,9 +33,16 @@ class Espacio:
 class DetectorParqueadero:
     """62-space lot in world coordinates — matches the frontend static layout."""
 
-    def __init__(self, seed: int = 23) -> None:
+    # def __init__(self, seed: int = 23) -> None:
+    #     self._espacios_base = self._crear_malla()
+    #     self._generador_ocupacion = GeneradorOcupacion(seed=seed)
+
+    def __init__(self) -> None:
         self._espacios_base = self._crear_malla()
-        self._generador_ocupacion = GeneradorOcupacion(seed=seed)
+        self._detector_real = DetectorReal()
+        self._asignador = AsignadorEspacios(
+            self._espacios_base
+        )
 
     def _crear_malla(self) -> list[tuple[str, float, float]]:
         espacios: list[tuple[str, float, float]] = []
@@ -49,13 +59,46 @@ class DetectorParqueadero:
     def obtener_espacios(self, reservados: set[str] | None = None) -> list[Espacio]:
         return self._generar_espacios(reservados or set())
 
-    def _generar_espacios(self, reservados: set[str]) -> list[Espacio]:
-        resultado = []
-        for indice, (espacio_id, x, z) in enumerate(self._espacios_base):
-            ocupado = self._generador_ocupacion.es_ocupado(indice, len(self._espacios_base))
-            reservado = espacio_id in reservados
-            resultado.append(Espacio(id=espacio_id, x=x, z=z, ocupado=ocupado, reservado=reservado))
-        return resultado
+    # def _generar_espacios(self, reservados: set[str]) -> list[Espacio]:
+    #     resultado = []
+    #     for indice, (espacio_id, x, z) in enumerate(self._espacios_base):
+    #         ocupado = self._generador_ocupacion.es_ocupado(indice, len(self._espacios_base))
+    #         reservado = espacio_id in reservados
+    #         resultado.append(Espacio(id=espacio_id, x=x, z=z, ocupado=ocupado, reservado=reservado))
+    #     return resultado
 
-    def obtener_clave_snapshot(self) -> int:
-        return self._generador_ocupacion.obtener_clave_snapshot(len(self._espacios_base))
+    def _generar_espacios(self, reservados):
+        vehiculos = self._detector_real.obtener_vehiculos()
+        ocupados = self._asignador.obtener_ocupados(
+            vehiculos
+        )
+        print("\nVEHICULOS:")
+        for v in vehiculos:
+            print(v)
+
+        print("\nESPACIOS OCUPADOS:")
+        for e in sorted(ocupados):
+            print(e)
+        resultado = []
+        for espacio_id, x, z in self._espacios_base:
+            resultado.append(
+                Espacio(
+                    id=espacio_id,
+                    x=x,
+                    z=z,
+                    ocupado=espacio_id in ocupados,
+                    reservado=espacio_id in reservados
+                )
+            )
+        return resultado
+    
+    # def obtener_clave_snapshot(self) -> int:
+    #     return self._generador_ocupacion.obtener_clave_snapshot(len(self._espacios_base))
+
+    def obtener_clave_snapshot(self):
+        vehiculos = self._detector_real.obtener_vehiculos()
+        return hash(
+            tuple(
+                sorted(vehiculos)
+            )
+        )
