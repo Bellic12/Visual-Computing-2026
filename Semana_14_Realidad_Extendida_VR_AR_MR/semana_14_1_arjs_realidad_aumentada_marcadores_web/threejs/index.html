@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>AR.js · Realidad Aumentada con Marcadores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <!-- A-Frame 1.3.0: versión compatible con AR.js 3.4.x (con 1.4.x el
+       componente arjs puede fallar y no arrancar la cámara). -->
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <!-- AR.js para A-Frame: tracking de marcadores con la cámara del dispositivo.
+       Se sirve desde jsDelivr (CDN estable) en lugar de raw.githack. -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- ───────────────── HUD / Interfaz de usuario ───────────────── -->
+  <div id="hud">
+    <div id="badge">
+      <span class="dot" id="status-dot"></span>
+      <span id="status-text">Buscando marcador…</span>
+    </div>
+    <div id="hint">
+      Apunta la cámara a un marcador <b>Barcode</b> (1, 2 o 5).<br />
+      Ábrelos en el celular o imprímelos (carpeta <b>markers/</b>).
+    </div>
+  </div>
+
+  <!-- Botón para silenciar / activar el audio de detección -->
+  <button id="mute-btn" title="Activar o silenciar sonido">🔊</button>
+
+  <!-- ───────────────────────── Escena AR ───────────────────────── -->
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="logarithmicDepthBuffer: true; colorManagement: true; antialias: true; alpha: true"
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;
+          sourceWidth: 1280; sourceHeight: 960; displayWidth: 1280; displayHeight: 960;
+          maxDetectionRate: 60; trackingMethod: best;">
+
+    <!-- Pre-carga de recursos (modelo glTF y sonido) -->
+    <a-assets timeout="15000">
+      <a-asset-item id="astronaut" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"></a-asset-item>
+      <audio id="beep" src="assets/beep.mp3" preload="auto"></audio>
+    </a-assets>
+
+    <!-- ===== MARCADOR 1: Barcode 1 → Modelo glTF (astronauta) =====
+         Los marcadores barcode son rejillas 3x3 de alto contraste: se
+         detectan mucho mejor que los patrones Hiro/Kanji, incluso en
+         pantalla o a distancia. Imagen: markers/marcador-1-astronauta.png -->
+    <a-marker id="marker-1" type="barcode" value="1" emitevents="true">
+      <!-- Modelo 3D externo cargado con gltf-model + animación de giro continuo -->
+      <a-entity
+        gltf-model="#astronaut"
+        position="0 0 0"
+        scale="0.5 0.5 0.5"
+        rotation="0 0 0"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 6000; easing: linear">
+      </a-entity>
+
+      <!-- Etiqueta flotante -->
+      <a-text value="BARCODE 1" align="center" color="#00e5ff" position="0 2.2 0"
+              rotation="-90 0 0" width="6"></a-text>
+    </a-marker>
+
+    <!-- ===== MARCADOR 2: Barcode 2 → Escena con primitivas animadas =====
+         Imagen: markers/marcador-2-sistema-solar.png -->
+    <a-marker id="marker-2" type="barcode" value="2" emitevents="true">
+      <!-- Pequeño "sistema solar" construido con primitivas de A-Frame -->
+      <a-entity animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear">
+        <!-- Sol -->
+        <a-sphere position="0 0.6 0" radius="0.35" color="#ffb703"
+                  material="emissive: #ff9e00; emissiveIntensity: 0.6"
+                  animation="property: scale; to: 1.12 1.12 1.12; dir: alternate; loop: true; dur: 1200"></a-sphere>
+        <!-- Órbita + planeta -->
+        <a-torus position="0 0.6 0" rotation="90 0 0" radius="0.9" radius-tubular="0.01"
+                 color="#8ecae6" opacity="0.5"></a-torus>
+        <a-sphere position="0.9 0.6 0" radius="0.12" color="#219ebc"
+                  animation="property: rotation; to: 0 -360 0; loop: true; dur: 3000; easing: linear"></a-sphere>
+      </a-entity>
+
+      <a-text value="BARCODE 2" align="center" color="#ffb703" position="0 2.0 0"
+              rotation="-90 0 0" width="6"></a-text>
+    </a-marker>
+
+    <!-- ===== MARCADOR 3: Barcode 5 → Caja interactiva =====
+         Imagen: markers/marcador-5-caja.png -->
+    <a-marker id="marker-5" type="barcode" value="5" emitevents="true">
+      <a-box class="clickable" position="0 0.5 0" scale="0.8 0.8 0.8" color="#e63946"
+             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000; easing: linear"></a-box>
+      <a-text value="BARCODE 5" align="center" color="#e63946" position="0 1.8 0"
+              rotation="-90 0 0" width="6"></a-text>
+    </a-marker>
+
+    <!-- Cámara de AR.js -->
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script src="app.js"></script>
+</body>
+</html>
